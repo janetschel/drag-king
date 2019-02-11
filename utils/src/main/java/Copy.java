@@ -1,5 +1,3 @@
-import java.io.*;
-
 public class Copy {
     public static void main(String[] args) {
         File srcFolder = new File("C:\\Users\\Administrator\\Desktop\\hello");
