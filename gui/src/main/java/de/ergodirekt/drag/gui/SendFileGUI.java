@@ -21,12 +21,12 @@ public class SendFileGUI {
         frame.setSize(400, 300);
         frame.setMinimumSize(new Dimension(230,200));
         frame.setTitle("Drag King");
-        erstelleMenue();
+
         frame.setLocationRelativeTo(null);
 
 
         frame.setLayout(new BorderLayout());
-
+        frame.setJMenuBar(bar);
         frame.add(getMittelPanel(), BorderLayout.CENTER);
         frame.add(getSuedPanel(), BorderLayout.SOUTH);
 
@@ -93,9 +93,9 @@ public class SendFileGUI {
     public static void main(String[] args) {
         new SendFileGUI();
     }
-    private void erstelleMenue() {
+    private Component getSuedPanel() erstelleMenue() {
         JMenuBar bar = new JMenuBar();
-        frame.setJMenuBar(bar);
+
 
         JMenu einstellungen = new JMenu("Einstellungen");
         bar.add(einstellungen);
