@@ -1,4 +1,4 @@
-package de.ergodirekt.drag.gui.dragAndDropTest;
+package de.ergodirekt.drag.dragLogic;
 
 import javax.swing.*;
 import java.awt.datatransfer.Transferable;
