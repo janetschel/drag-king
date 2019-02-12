@@ -3,10 +3,8 @@ package de.ergodirekt.drag.gui;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class DragKingGUI implements ActionListener {
+public class DragKingGUI {
     private JFrame frame;
 
     public DragKingGUI() {
@@ -32,11 +30,8 @@ public class DragKingGUI implements ActionListener {
         JButton bSenden = new JButton("Senden");
         String[] placeholder = {"Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"}; //TODO Windowsbenutzer ziehen
 
-        JComboBox<Object> benutzerliste = new JComboBox<>();
-        benutzerliste = new JComboBox<>(placeholder);
+        JComboBox<String> benutzerliste = new JComboBox<>(placeholder);
         panel.add(benutzerliste, BorderLayout.WEST);
-
-        bSenden.addActionListener(this);
         panel.add(bSenden, BorderLayout.EAST);
 
         panel.setBorder(BorderFactory.createLineBorder(frame.getContentPane().getBackground(), 10));
@@ -57,20 +52,16 @@ public class DragKingGUI implements ActionListener {
 
         return panel;
     }
-
-    /* private Component getNordPanel() {
+/*
+    private Component getNordPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
+
         return panel;
-    } */
+    }
+    */
 
     public static void main(String[] args) {
         new DragKingGUI();
-
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
     }
 }
