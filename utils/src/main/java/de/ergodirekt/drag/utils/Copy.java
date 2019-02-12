@@ -1,12 +1,20 @@
+package de.ergodirekt.drag.utils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+
 public class Copy {
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws DragException {
         File srcFolder = new File("C:\\Users\\Administrator\\Desktop\\hello");
-        File destFolder = new File("C:\\Users\\Administrator\\Documents\\newHello\\");
+        File destFolder = new File("C:\\Users\\Administrator\\Documents\\newHello");
 
         if (!srcFolder.exists()) {
-            System.out.println("Directory does not exist.");
-            System.out.println("Good bye1 ");
-            System.exit(1);
+                throw new DragException("Directory does not exist.");
 
         } else {
             try {
@@ -32,10 +40,10 @@ public class Copy {
                 File destFile = new File(dest, file);
                 copyFolder(srcFile, destFile);
             }
-
+        }else {
 
             try (InputStream in = new FileInputStream(src);
-                 OutputStream out = new FileOutputStream(dest)) {
+                 FileOutputStream out = new FileOutputStream(dest)) {
                 byte[] buffer = new byte[1024];
                 int length;
                 while ((length = in.read(buffer)) > 0) {
@@ -44,8 +52,22 @@ public class Copy {
                 System.out.println("copied from " + src + " to " + dest);
             }
         }
+
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
