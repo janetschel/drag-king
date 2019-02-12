@@ -10,7 +10,10 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class SendFileGUI {
     private JFrame frame;
@@ -31,23 +34,35 @@ public class SendFileGUI {
     }
 
     private Component getSuedPanel() {
+        ArrayList<String> auswahlListe = new ArrayList<>();
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         JButton bSenden = new JButton("Senden");
         JButton bAbrechen = new JButton("Abrechen");
-        String[] placeholder = {"Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"};
+        String[] placeholder = {"","Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"};
         JPanel benutzerPanel = new JPanel();
+        JLabel label = new JLabel();
         JComboBox<String> benutzerliste = new JComboBox<>(placeholder);
-
-        benutzerliste.setActionCommand( " 2 " );
+        benutzerliste.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    label.setText((String) e.getItem());
+              auswahlListe.add((String) e.getItem());
+                   for(String s : auswahlListe){
+                       System.out.println(s);
+                   }
+                }}});
         benutzerliste.setEditable( true );
 
         benutzerPanel.add(benutzerliste, BorderLayout.WEST);
+        benutzerPanel.add(label, BorderLayout.WEST);
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(bAbrechen);
         buttonPanel.add(bSenden);
         panel.add(buttonPanel, BorderLayout.EAST);
         panel.add(benutzerPanel, BorderLayout.WEST);
+
 
 
         panel.setBorder(BorderFactory.createLineBorder(frame.getContentPane().getBackground(), 10));
