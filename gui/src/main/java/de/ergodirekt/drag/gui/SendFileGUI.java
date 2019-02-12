@@ -23,7 +23,7 @@ public class SendFileGUI {
         frame.setTitle("Drag King");
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());
-        frame.add(getErstelleMenue(), BorderLayout.NORTH);
+        frame.setJMenuBar(getMenue());
         frame.add(getMittelPanel(), BorderLayout.CENTER);
         frame.add(getSuedPanel(), BorderLayout.SOUTH);
 
@@ -68,7 +68,7 @@ public class SendFileGUI {
                 if (tr.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY);
                     try {
-                        System.out.println(dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor)); //TODO Dateipfad speichern
+                        System.out.println(dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor));
                     } catch (UnsupportedFlavorException | IOException e) {
                         e.printStackTrace();
                     }
@@ -88,7 +88,7 @@ public class SendFileGUI {
         new SendFileGUI();
     }
 
-    private Component getErstelleMenue() {
+    private JMenuBar getMenue() {
         JMenuBar bar = new JMenuBar();
 
 
