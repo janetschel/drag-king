@@ -1,6 +1,6 @@
 package de.ergodirekt.drag.gui.receiving;
 
-import de.ergodirekt.drag.dragLogic.ListTransferHandler;
+import de.ergodirekt.drag.logic.ListTransferHandler;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

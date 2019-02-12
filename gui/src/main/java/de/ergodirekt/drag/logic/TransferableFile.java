@@ -1,4 +1,4 @@
-package de.ergodirekt.drag.dragLogic;
+package de.ergodirekt.drag.logic;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
