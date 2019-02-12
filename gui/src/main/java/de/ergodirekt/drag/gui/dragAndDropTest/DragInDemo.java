@@ -1,3 +1,5 @@
+package de.ergodirekt.drag.gui.dragAndDropTest;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.*;
@@ -5,7 +7,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class DragnDropTest extends Application {
+public class DragInDemo extends Application {
 
     @Override
     public void start(Stage primaryStage) {
@@ -14,7 +16,7 @@ public class DragnDropTest extends Application {
                 event -> {
                     if (event.getGestureSource() != dragTarget
                             && event.getDragboard().hasFiles()) {
-                        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                        event.acceptTransferModes(TransferMode.COPY);
                     }
                     event.consume();
                 }
