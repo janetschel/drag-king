@@ -11,14 +11,14 @@ import javax.swing.*;
 
 public class ReceiveFileGUI {
     private JDialog dialog;
-    private JLabel filesNotFoundLabel;
+    private JLabel statusLabel;
 
     public ReceiveFileGUI() {
         dialog = new JDialog();
         dialog.setLayout(new BorderLayout());
-        filesNotFoundLabel = new JLabel();
+        statusLabel = new JLabel();
         dialog.add(getCenter(), BorderLayout.CENTER);
-        dialog.add(filesNotFoundLabel, BorderLayout.SOUTH);
+        dialog.add(statusLabel, BorderLayout.SOUTH);
         initFrame();
     }
 
@@ -28,7 +28,7 @@ public class ReceiveFileGUI {
         try {
             label.setTransferHandler(new ListTransferHandler(getSelectedItems()));
         } catch (FileNotFoundException e) {
-            filesNotFoundLabel.setText(e.getMessage());
+            statusLabel.setText(e.getMessage());
         }
         label.addMouseListener(new MouseAdapter() {
             @Override
