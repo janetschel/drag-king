@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class GetIconFromFilePath {
+public abstract class GetIconFromFilePath {
     /**
      * Gibt das ImageIcon zur Datei - skaliert auf width und height - zurück
      * @param filePath Pfad zu der Datei
@@ -17,7 +17,7 @@ public class GetIconFromFilePath {
      * @return ImageIcon zum setzen auf ein Label oder Ähnliches, Standard ist ein ImageIcon von einem Ordner
      * @throws DateiExistiertNichtException, wenn die Standarddatei nicht existiert
      */
-    public ImageIcon getIconFromFilePath(String filePath, int width, int height) throws DateiExistiertNichtException {
+    public static ImageIcon getIconFromFilePath(String filePath, int width, int height) throws DateiExistiertNichtException {
         BufferedImage image;
         String[] filePathParts = filePath.split("\\.");
         String fileEnding = "." + (filePathParts.length > 1 ? filePathParts[filePathParts.length - 1] : "");
@@ -41,7 +41,7 @@ public class GetIconFromFilePath {
      * @return ImageIcon zum setzen auf ein Label oder Ähnliches
      * @throws DateiExistiertNichtException, wenn die Standarddatei nicht existiert
      */
-    public ImageIcon getIconFromFilePath(String filePath) throws DateiExistiertNichtException {
+    public static ImageIcon getIconFromFilePath(String filePath) throws DateiExistiertNichtException {
         return getIconFromFilePath(filePath, 0, 0);
     }
 }
