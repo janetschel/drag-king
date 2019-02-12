@@ -11,6 +11,7 @@ import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class SendFileGUI {
     private JFrame frame;
@@ -22,7 +23,6 @@ public class SendFileGUI {
         frame.setMinimumSize(new Dimension(230,200));
         frame.setTitle("Drag King");
         frame.setLocationRelativeTo(null);
-
 
         frame.setLayout(new BorderLayout());
         //frame.add(getNordPanel(), BorderLayout.NORTH);
@@ -81,7 +81,7 @@ public class SendFileGUI {
 
         return mittelScrollPane;
     }
-/*
+    /*
     private Component getNordPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());

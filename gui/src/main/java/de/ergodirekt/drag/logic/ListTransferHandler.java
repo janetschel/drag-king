@@ -6,12 +6,18 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListTransferHandler extends TransferHandler
-{
-    public Transferable createTransferable(JComponent c)
-    {
+public class ListTransferHandler extends TransferHandler {
+    private List<String> selectedItems;
+
+    public ListTransferHandler(List<String> selectedItems) {
+        this.selectedItems = selectedItems;
+    }
+
+    public Transferable createTransferable(JComponent c) {
         List<File> files = new ArrayList<>();
-        files.add(new File(System.getProperty("user.dir") + "/images/Icon.png")); //TODO Pfad zu Datei auf Public Laufwerk
+        for (String item : selectedItems) {
+            files.add(new File(item));
+        }
         return new TransferableFile(files);
     }
 
@@ -42,4 +48,4 @@ public class ListTransferHandler extends TransferHandler
    }*/
 
 
-} // end class ListTransferHandler extends TransferHandler
+}

@@ -4,6 +4,7 @@ import de.ergodirekt.drag.logic.ListTransferHandler;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import javax.swing.*;
 
 public class ReceiveFileGUI {
@@ -20,7 +21,7 @@ public class ReceiveFileGUI {
     {
         ImageIcon icon = new ImageIcon(System.getProperty("user.dir") + "/images/Icon.png"); //TODO Icon der Datei auf dem Public Laufwerk
         JLabel label = new JLabel(icon);
-        label.setTransferHandler(new ListTransferHandler());
+        label.setTransferHandler(new ListTransferHandler(getSelectedItems()));
         label.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent mEvt) { //Notwendig, da Drag and Drop normalerweise mit Label nicht möglich
@@ -41,8 +42,16 @@ public class ReceiveFileGUI {
         dialog.setVisible(true);
     }
 
+    private java.util.List<String> getSelectedItems() { //TODO wirklich ausgewählte Pfade hinzufügen
+        java.util.List<String> selectedItems = new ArrayList<>();
+        selectedItems.add(System.getProperty("user.dir") + "/images/Icon.png");
+        selectedItems.add(System.getProperty("user.dir") + "/images/Icon2.png");
+
+        return selectedItems;
+    }
+
     public static void main(String[] args)
     {
         new ReceiveFileGUI();
     }
-} // end class
+}
