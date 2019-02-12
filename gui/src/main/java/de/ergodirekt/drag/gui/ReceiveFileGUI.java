@@ -1,13 +1,15 @@
-package de.ergodirekt.drag.gui.dragAndDropTest;
+package de.ergodirekt.drag.gui;
+
+import de.ergodirekt.drag.logic.ListTransferHandler;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 
-public class DragOutside {
+public class ReceiveFileGUI {
     private JDialog dialog;
 
-    public DragOutside()
+    public ReceiveFileGUI()
     {
         dialog = new JDialog();
         initCenter();
@@ -21,7 +23,7 @@ public class DragOutside {
         label.setTransferHandler(new ListTransferHandler());
         label.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent mEvt) { //Notwendig, da Drag and Drop normalerweise mit Label nich möglich
+            public void mousePressed(MouseEvent mEvt) { //Notwendig, da Drag and Drop normalerweise mit Label nicht möglich
                 JComponent component = (JComponent) mEvt.getSource();
                 TransferHandler tHandler = component.getTransferHandler();
                 tHandler.exportAsDrag(component, mEvt, TransferHandler.COPY);
@@ -41,6 +43,6 @@ public class DragOutside {
 
     public static void main(String[] args)
     {
-        new DragOutside();
+        new ReceiveFileGUI();
     }
 } // end class
