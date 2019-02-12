@@ -16,7 +16,7 @@ public class DragInDemo extends Application {
                 event -> {
                     if (event.getGestureSource() != dragTarget
                             && event.getDragboard().hasFiles()) {
-                        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                        event.acceptTransferModes(TransferMode.COPY);
                     }
                     event.consume();
                 }

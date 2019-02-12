@@ -3,19 +3,23 @@ package de.ergodirekt.drag.gui.dragAndDropTest;
 import javax.swing.*;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ListTransferHandler extends TransferHandler
 {
     public Transferable createTransferable(JComponent c)
     {
-        Vector files = new Vector();
-        files.add(new File("C:\\Users\\Administrator\\Desktop\\Icon2.png")); //Pfad zu Datei auf Public Laufwerk
-        TransferableFile  tf = new TransferableFile(files);
-        return tf;
+        List<File> files = new ArrayList<>();
+        files.add(new File(System.getProperty("user.dir") + "\\images\\Icon.png")); //TODO Pfad zu Datei auf Public Laufwerk
+        return new TransferableFile(files);
     }
 
-   /*
+    public int getSourceActions(JComponent c) {
+        return COPY;
+    }
+
+    /*
    public void exportToClipboard(JComponent comp, Clipboard clip, int action)
       throws IllegalStateException
    {
@@ -33,9 +37,9 @@ public class ListTransferHandler extends TransferHandler
    //Invoked after data has been exported.
    public void exportDone(JComponent source, Transferable data, int action)
    {
-      System.out.println("exportDone");
-      super.exportDone(source, data, action) ;
-   }
-   */
+      super.exportDone(source, data, action);
+      System.exit(0);
+   }*/
+
 
 } // end class ListTransferHandler extends TransferHandler
