@@ -11,7 +11,7 @@ public class ListTransferHandler extends TransferHandler
     public Transferable createTransferable(JComponent c)
     {
         List<File> files = new ArrayList<>();
-        files.add(new File(System.getProperty("user.dir") + "\\images\\Icon.png")); //TODO Pfad zu Datei auf Public Laufwerk
+        files.add(new File(System.getProperty("user.dir") + "/images/Icon.png")); //TODO Pfad zu Datei auf Public Laufwerk
         return new TransferableFile(files);
     }
 

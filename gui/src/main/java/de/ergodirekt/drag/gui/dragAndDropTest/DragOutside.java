@@ -16,7 +16,7 @@ public class DragOutside {
 
     private void initCenter()
     {
-        ImageIcon icon = new ImageIcon(System.getProperty("user.dir") + "\\images\\Icon.png"); //TODO Icon der Datei auf dem Public Laufwerk
+        ImageIcon icon = new ImageIcon(System.getProperty("user.dir") + "/images/Icon.png"); //TODO Icon der Datei auf dem Public Laufwerk
         JLabel label = new JLabel(icon);
         label.setTransferHandler(new ListTransferHandler());
         label.addMouseListener(new MouseAdapter() {
