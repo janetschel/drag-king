@@ -19,14 +19,11 @@ public class SendFileGUI {
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
-        frame.setMinimumSize(new Dimension(230,200));
+        frame.setMinimumSize(new Dimension(230, 200));
         frame.setTitle("Drag King");
-
         frame.setLocationRelativeTo(null);
-
-
         frame.setLayout(new BorderLayout());
-        frame.setJMenuBar(bar);
+        frame.add(getErstelleMenue(), BorderLayout.NORTH);
         frame.add(getMittelPanel(), BorderLayout.CENTER);
         frame.add(getSuedPanel(), BorderLayout.SOUTH);
 
@@ -39,7 +36,7 @@ public class SendFileGUI {
         JButton bSenden = new JButton("Senden");
         JButton bAbrechen = new JButton("Abrechen");
         String[] placeholder = {"Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"};
-        JPanel benutzerPanel=new JPanel();
+        JPanel benutzerPanel = new JPanel();
         JComboBox<String> benutzerliste = new JComboBox<>(placeholder);
         benutzerPanel.add(benutzerliste, BorderLayout.WEST);
         JPanel buttonPanel = new JPanel();
@@ -59,7 +56,7 @@ public class SendFileGUI {
         mittelScrollPane.setLayout(new ScrollPaneLayout());
         mittelScrollPane.setBorder(
                 new CompoundBorder(
-                        BorderFactory.createEmptyBorder(10,10,10,10),
+                        BorderFactory.createEmptyBorder(10, 10, 10, 10),
                         BorderFactory.createLineBorder(new Color(0xdd444444), 1)
                 )
         );
@@ -68,8 +65,7 @@ public class SendFileGUI {
             public void drop(DropTargetDropEvent dtde) {
                 Transferable tr = dtde.getTransferable();
 
-                if ( tr.isDataFlavorSupported (DataFlavor.javaFileListFlavor) )
-                {
+                if (tr.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY);
                     try {
                         System.out.println(dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor)); //TODO Dateipfad speichern
@@ -77,9 +73,7 @@ public class SendFileGUI {
                         e.printStackTrace();
                     }
                     dtde.getDropTargetContext().dropComplete(true);
-                }
-                else
-                {
+                } else {
                     dtde.rejectDrop();
                 }
             }
@@ -93,7 +87,8 @@ public class SendFileGUI {
     public static void main(String[] args) {
         new SendFileGUI();
     }
-    private Component getSuedPanel() erstelleMenue() {
+
+    private Component getErstelleMenue() {
         JMenuBar bar = new JMenuBar();
 
 
@@ -117,7 +112,8 @@ public class SendFileGUI {
         info.add(item5);
         JMenuItem item6 = new JMenuItem("f");
         info.add(item6);
-
-
+        return bar;
     }
+
+
 }
