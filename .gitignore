@@ -12,3 +12,5 @@ gradle/
 *.class
 
 build/
+
+!lib/JIconExtract.jar
