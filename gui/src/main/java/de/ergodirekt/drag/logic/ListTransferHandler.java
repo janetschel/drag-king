@@ -3,15 +3,31 @@ package de.ergodirekt.drag.logic;
 import javax.swing.*;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListTransferHandler extends TransferHandler
-{
-    public Transferable createTransferable(JComponent c)
-    {
-        List<File> files = new ArrayList<>();
-        files.add(new File(System.getProperty("user.dir") + "/images/Icon.png")); //TODO Pfad zu Datei auf Public Laufwerk
+public class ListTransferHandler extends TransferHandler {
+    private ArrayList<File> files;
+
+    public ListTransferHandler(List<String> selectedItems) throws FileNotFoundException {
+        StringBuilder filesNotFoundStringBuilder = new StringBuilder("<html>Folgende Dateien konnten nicht gefunden werden:<br/>");
+        files = new ArrayList<>();
+        File file;
+        for (String item : selectedItems) {
+            file = new File(item);
+            if (file.exists()) {
+                files.add(file);
+            } else {
+                filesNotFoundStringBuilder.append(item).append("<br/>");
+            }
+        }
+        if (!filesNotFoundStringBuilder.toString().equals("<html>Folgende Dateien konnten nicht gefunden werden:\n")) {
+            throw new FileNotFoundException(filesNotFoundStringBuilder.toString() + "</html>");
+        }
+    }
+
+    public Transferable createTransferable(JComponent c) {
         return new TransferableFile(files);
     }
 
@@ -42,4 +58,4 @@ public class ListTransferHandler extends TransferHandler
    }*/
 
 
-} // end class ListTransferHandler extends TransferHandler
+}

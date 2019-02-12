@@ -22,6 +22,7 @@ public class SendFileGUI {
         frame.setMinimumSize(new Dimension(230, 200));
         frame.setTitle("Drag King");
         frame.setLocationRelativeTo(null);
+
         frame.setLayout(new BorderLayout());
         frame.setJMenuBar(getMenue());
         frame.add(getMittelPanel(), BorderLayout.CENTER);
