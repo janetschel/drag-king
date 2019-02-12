@@ -28,11 +28,17 @@ public class DragKingGUI {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         JButton bSenden = new JButton("Senden");
-        String[] placeholder = {"Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"}; //TODO Windowsbenutzer ziehen
-
+        JButton bAbrechen = new JButton("Abrechen");
+        String[] placeholder = {"Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"};
+        JPanel benutzerPanel=new JPanel();
         JComboBox<String> benutzerliste = new JComboBox<>(placeholder);
-        panel.add(benutzerliste, BorderLayout.WEST);
-        panel.add(bSenden, BorderLayout.EAST);
+        benutzerPanel.add(benutzerliste, BorderLayout.WEST);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(bAbrechen);
+        buttonPanel.add(bSenden);
+        panel.add(buttonPanel, BorderLayout.EAST);
+        panel.add(benutzerPanel, BorderLayout.WEST);
+
 
         panel.setBorder(BorderFactory.createLineBorder(frame.getContentPane().getBackground(), 10));
 
