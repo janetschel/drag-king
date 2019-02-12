@@ -1,4 +1,4 @@
-package de.ergodirekt.drag.gui.sending;
+package de.ergodirekt.drag.gui;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -65,7 +65,7 @@ public class SendFileGUI {
                 {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY);
                     try {
-                        System.out.println(dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor));
+                        System.out.println(dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor)); //TODO Dateipfad speichern
                     } catch (UnsupportedFlavorException | IOException e) {
                         e.printStackTrace();
                     }
@@ -73,7 +73,6 @@ public class SendFileGUI {
                 }
                 else
                 {
-                    System.err.println ("Ungültige Datei (UnsupportedFlavorException)");
                     dtde.rejectDrop();
                 }
             }

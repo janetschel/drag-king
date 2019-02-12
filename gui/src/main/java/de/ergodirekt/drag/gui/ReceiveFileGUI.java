@@ -1,4 +1,4 @@
-package de.ergodirekt.drag.gui.receiving;
+package de.ergodirekt.drag.gui;
 
 import de.ergodirekt.drag.logic.ListTransferHandler;
 
