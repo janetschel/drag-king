@@ -20,12 +20,12 @@ public class SendFileGUI {
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
-        frame.setMinimumSize(new Dimension(230,200));
+        frame.setMinimumSize(new Dimension(230, 200));
         frame.setTitle("Drag King");
         frame.setLocationRelativeTo(null);
 
         frame.setLayout(new BorderLayout());
-        //frame.add(getNordPanel(), BorderLayout.NORTH);
+        frame.setJMenuBar(getMenue());
         frame.add(getMittelPanel(), BorderLayout.CENTER);
         frame.add(getSuedPanel(), BorderLayout.SOUTH);
 
@@ -36,11 +36,17 @@ public class SendFileGUI {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         JButton bSenden = new JButton("Senden");
-        String[] placeholder = {"Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"}; //TODO Windowsbenutzer ziehen
-
+        JButton bAbrechen = new JButton("Abrechen");
+        String[] placeholder = {"Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"};
+        JPanel benutzerPanel = new JPanel();
         JComboBox<String> benutzerliste = new JComboBox<>(placeholder);
-        panel.add(benutzerliste, BorderLayout.WEST);
-        panel.add(bSenden, BorderLayout.EAST);
+        benutzerPanel.add(benutzerliste, BorderLayout.WEST);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(bAbrechen);
+        buttonPanel.add(bSenden);
+        panel.add(buttonPanel, BorderLayout.EAST);
+        panel.add(benutzerPanel, BorderLayout.WEST);
+
 
         panel.setBorder(BorderFactory.createLineBorder(frame.getContentPane().getBackground(), 10));
 
@@ -52,7 +58,7 @@ public class SendFileGUI {
         mittelScrollPane.setLayout(new ScrollPaneLayout());
         mittelScrollPane.setBorder(
                 new CompoundBorder(
-                        BorderFactory.createEmptyBorder(10,10,10,10),
+                        BorderFactory.createEmptyBorder(10, 10, 10, 10),
                         BorderFactory.createLineBorder(new Color(0xdd444444), 1)
                 )
         );
@@ -61,18 +67,15 @@ public class SendFileGUI {
             public void drop(DropTargetDropEvent dtde) {
                 Transferable tr = dtde.getTransferable();
 
-                if ( tr.isDataFlavorSupported (DataFlavor.javaFileListFlavor) )
-                {
+                if (tr.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY);
                     try {
-                        System.out.println(dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor)); //TODO Dateipfad speichern
+                        System.out.println(dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor));
                     } catch (UnsupportedFlavorException | IOException e) {
                         e.printStackTrace();
                     }
                     dtde.getDropTargetContext().dropComplete(true);
-                }
-                else
-                {
+                } else {
                     dtde.rejectDrop();
                 }
             }
@@ -81,16 +84,38 @@ public class SendFileGUI {
 
         return mittelScrollPane;
     }
-    /*
-    private Component getNordPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout());
 
-        return panel;
-    }
-    */
 
     public static void main(String[] args) {
         new SendFileGUI();
     }
+
+    private JMenuBar getMenue() {
+        JMenuBar bar = new JMenuBar();
+
+
+        JMenu einstellungen = new JMenu("Einstellungen");
+        bar.add(einstellungen);
+        JMenuItem item1 = new JMenuItem("a");
+        einstellungen.add(item1);
+        JMenuItem item2 = new JMenuItem("b");
+        einstellungen.add(item2);
+
+        JMenu gruppen = new JMenu("Gruppenverwaltung");
+        bar.add(gruppen);
+        JMenuItem item3 = new JMenuItem("c");
+        gruppen.add(item3);
+        JMenuItem item4 = new JMenuItem("d");
+        gruppen.add(item4);
+
+        JMenu info = new JMenu("Info");
+        bar.add(info);
+        JMenuItem item5 = new JMenuItem("e");
+        info.add(item5);
+        JMenuItem item6 = new JMenuItem("f");
+        info.add(item6);
+        return bar;
+    }
+
+
 }
