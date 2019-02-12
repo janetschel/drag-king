@@ -6,44 +6,40 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-// TODO umbenennen
-// TODO FCoI
-public class DragKingGUI extends JFrame implements ActionListener {
-
-
-    private JComboBox<Object> benutzerliste;
-    private JButton bSenden;
+public class DragKingGUI implements ActionListener {
+    private JFrame frame;
 
     public DragKingGUI() {
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setSize(400, 300);
-        setMinimumSize(new Dimension(230,200));
-        setTitle("Drag King");
-        setLocationRelativeTo(null);
+        frame=new JFrame();
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setSize(400, 300);
+        frame.setMinimumSize(new Dimension(230,200));
+        frame.setTitle("Drag King");
+        frame.setLocationRelativeTo(null);
 
 
-        setLayout(new BorderLayout());
-        //add(getNordPanel(), BorderLayout.NORTH);
-        add(getMittelPanel(), BorderLayout.CENTER);
-        add(getSuedPanel(), BorderLayout.SOUTH);
+        frame.setLayout(new BorderLayout());
+        //frame.add(getNordPanel(), BorderLayout.NORTH);
+        frame.add(getMittelPanel(), BorderLayout.CENTER);
+        frame.add(getSuedPanel(), BorderLayout.SOUTH);
 
-        setVisible(true);
+        frame.setVisible(true);
     }
 
     private Component getSuedPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        bSenden = new JButton("Senden");
+        JButton bSenden = new JButton("Senden");
         String[] placeholder = {"Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"}; //TODO Windowsbenutzer ziehen
 
-        benutzerliste = new JComboBox<>();
-        benutzerliste= new JComboBox<>(placeholder);
+        JComboBox<Object> benutzerliste = new JComboBox<>();
+        benutzerliste = new JComboBox<>(placeholder);
         panel.add(benutzerliste, BorderLayout.WEST);
 
         bSenden.addActionListener(this);
         panel.add(bSenden, BorderLayout.EAST);
 
-        panel.setBorder(BorderFactory.createLineBorder(getContentPane().getBackground(), 10));
+        panel.setBorder(BorderFactory.createLineBorder(frame.getContentPane().getBackground(), 10));
 
         return panel;
     }
@@ -53,7 +49,7 @@ public class DragKingGUI extends JFrame implements ActionListener {
         panel.setLayout(new FlowLayout());
         panel.setBorder(
                 new CompoundBorder(
-                        BorderFactory.createLineBorder(getContentPane().getBackground(), 10),
+                        BorderFactory.createLineBorder(frame.getContentPane().getBackground(), 10),
                         BorderFactory.createLineBorder(new Color(0xdd444444), 1)
                 )
         );
