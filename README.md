@@ -8,8 +8,6 @@ Drag and Drop Dateien in eine GUI, und gebe einen Windows-Benutzernamen an, der 
 3. Wenn du fertig bist, erstelle ein Pull Request und setze Assignee (Leute, die an dieser Aufgabe auch beteiligt sind) fest.
 4. Warte, bis dein Pull Request gemerged wurde, dann kannst du den Status deines Issues weiter setzen. Währenddessen kannst du natürlich an anderen Issues arbeiten.
 
-![Workflow](/images/WorkFlow.png)
-
 ## So erstellst du ein Issue - und nicht anders!
 
 Um einen einheitlichen und reibungsfreien Workflow in diesem Projekt garantieren zu können, sollte nur nach diesem Muster Issues erstellt werden. Damit bleibt alles um einiges übersichtlicher!
@@ -22,8 +20,6 @@ Um einen einheitlichen und reibungsfreien Workflow in diesem Projekt garantieren
 **Issue Thema**
 - AS IS: Beschreibt den aktuellen Zustand des Issues
 - AS SHOULD BE: Beschreibt wie die Situation - wenn fertig - aussehen soll
-
-![Workflow](/images/Issue.png)
 
 ## Weitere Informationen
 
