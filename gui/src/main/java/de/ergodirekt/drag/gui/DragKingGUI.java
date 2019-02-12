@@ -13,11 +13,12 @@ public class DragKingGUI {
         frame.setSize(400, 300);
         frame.setMinimumSize(new Dimension(230,200));
         frame.setTitle("Drag King");
+        erstelleMenue();
         frame.setLocationRelativeTo(null);
 
 
         frame.setLayout(new BorderLayout());
-        frame.add(getNordPanel(), BorderLayout.NORTH);
+
         frame.add(getMittelPanel(), BorderLayout.CENTER);
         frame.add(getSuedPanel(), BorderLayout.SOUTH);
 
@@ -58,12 +59,7 @@ public class DragKingGUI {
 
         return panel;
     }
-    private Component getNordPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout());
-        erstelleMenue();
-        return panel;
-    }
+
 
     public static void main(String[] args) {
         new DragKingGUI();
