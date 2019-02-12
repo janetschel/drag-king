@@ -3,12 +3,20 @@ package de.ergodirekt.drag.gui;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetAdapter;
+import java.awt.dnd.DropTargetDropEvent;
+import java.io.IOException;
 
-public class DragKingGUI {
+public class SendFileGUI {
     private JFrame frame;
 
-    public DragKingGUI() {
-        frame=new JFrame();
+    public SendFileGUI() {
+        frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
         frame.setMinimumSize(new Dimension(230,200));
@@ -47,22 +55,43 @@ public class DragKingGUI {
     }
 
     private Component getMittelPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout());
-        panel.setBorder(
+        JScrollPane mittelScrollPane = new JScrollPane();
+        mittelScrollPane.setLayout(new ScrollPaneLayout());
+        mittelScrollPane.setBorder(
                 new CompoundBorder(
-                        BorderFactory.createLineBorder(frame.getContentPane().getBackground(), 10),
+                        BorderFactory.createEmptyBorder(10,10,10,10),
                         BorderFactory.createLineBorder(new Color(0xdd444444), 1)
                 )
         );
-        panel.setBackground(new Color(0xffffffff));
+        new DropTarget(mittelScrollPane, new DropTargetAdapter() {
+            @Override
+            public void drop(DropTargetDropEvent dtde) {
+                Transferable tr = dtde.getTransferable();
 
-        return panel;
+                if ( tr.isDataFlavorSupported (DataFlavor.javaFileListFlavor) )
+                {
+                    dtde.acceptDrop(DnDConstants.ACTION_COPY);
+                    try {
+                        System.out.println(dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor)); //TODO Dateipfad speichern
+                    } catch (UnsupportedFlavorException | IOException e) {
+                        e.printStackTrace();
+                    }
+                    dtde.getDropTargetContext().dropComplete(true);
+                }
+                else
+                {
+                    dtde.rejectDrop();
+                }
+            }
+        });
+        mittelScrollPane.getViewport().setBackground(new Color(0xffffffff));
+
+        return mittelScrollPane;
     }
 
 
     public static void main(String[] args) {
-        new DragKingGUI();
+        new SendFileGUI();
     }
     private void erstelleMenue() {
         JMenuBar bar = new JMenuBar();
