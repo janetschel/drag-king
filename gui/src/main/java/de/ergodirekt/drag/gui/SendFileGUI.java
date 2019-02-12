@@ -38,6 +38,10 @@ public class SendFileGUI {
         String[] placeholder = {"Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"};
         JPanel benutzerPanel = new JPanel();
         JComboBox<String> benutzerliste = new JComboBox<>(placeholder);
+
+        benutzerliste.setActionCommand( " 2 " );
+        benutzerliste.setEditable( true );
+
         benutzerPanel.add(benutzerliste, BorderLayout.WEST);
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(bAbrechen);
