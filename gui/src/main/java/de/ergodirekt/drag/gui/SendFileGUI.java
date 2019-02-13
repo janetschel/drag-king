@@ -32,6 +32,7 @@ public class SendFileGUI {
         frame.add(getSuedPanel(), BorderLayout.SOUTH);
 
         frame.setVisible(true);
+
     }
 
     private Component getSuedPanel() {
@@ -114,26 +115,74 @@ public class SendFileGUI {
 
         JMenu einstellungen = new JMenu("Einstellungen");
         bar.add(einstellungen);
-        JMenuItem item1 = new JMenuItem("a");
-        einstellungen.add(item1);
-        JMenuItem item2 = new JMenuItem("b");
-        einstellungen.add(item2);
-
+        JMenuItem eignschaften = new JMenuItem("Eigenschaften");
         JMenu gruppen = new JMenu("Gruppenverwaltung");
-        bar.add(gruppen);
-        JMenuItem item3 = new JMenuItem("c");
-        gruppen.add(item3);
-        JMenuItem item4 = new JMenuItem("d");
-        gruppen.add(item4);
+        JMenuItem neu = new JMenuItem("Neu");
+        JMenuItem loschen = new JMenuItem("Löschen");
+        JMenuItem bearbeiten = new JMenuItem("Bearbeiten");
+
+     /*   submenu = new JMenu("A submenu");
+        submenu.setMnemonic(KeyEvent.VK_S);
+
+        menuItem = new JMenuItem("An item in the submenu");
+        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_2, ActionEvent.ALT_MASK));
+        submenu.add(menuItem);*/
+
+
+
+        einstellungen.add(eignschaften);
+        einstellungen.addSeparator();
+        einstellungen.add(gruppen);
+        gruppen.add(neu);
+        gruppen.add(bearbeiten);
+        gruppen.add(loschen);
+
+
+        eignschaften.addActionListener(e -> eignschaften());
+        neu.addActionListener(e -> neu());
+        bearbeiten.addActionListener(e -> bearbeiten());
+        loschen.addActionListener(e -> loschen());
 
         JMenu info = new JMenu("Info");
         bar.add(info);
-        JMenuItem item5 = new JMenuItem("e");
-        info.add(item5);
-        JMenuItem item6 = new JMenuItem("f");
-        info.add(item6);
+        JMenuItem hilfe = new JMenuItem("Hilfe");
+        JMenuItem uber = new JMenuItem("Über");
+        info.add(hilfe);
+        info.add(uber);
+
+
+        hilfe.addActionListener(e -> hilfe());
+        uber.addActionListener(e -> uber());
         return bar;
     }
 
+    private void hilfe() {
+         new HilfeGUI(frame);
 
-}
+    }
+    private void uber() {
+        new UberGUI(frame);
+
+    }
+
+
+    private void neu() {
+        new GruppenNeuGUI(frame);
+
+    }
+    private void loschen() {
+        new GruppenLoschenGUI(frame);
+
+    }
+    private void bearbeiten() {
+        new GruppenBearbeitenGUI(frame);
+
+    }
+
+    private void eignschaften() {
+        new EigenscaftenGUI(frame);
+    }
+
+
+    }
