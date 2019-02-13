@@ -14,9 +14,12 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 public class SendFileGUI {
     private JFrame frame;
+    private JList<String> list;
 
     public SendFileGUI() {
         frame = new JFrame();
@@ -28,17 +31,32 @@ public class SendFileGUI {
 
         frame.setLayout(new BorderLayout());
         frame.setJMenuBar(getMenue());
+
         frame.add(getMittelPanel(), BorderLayout.CENTER);
         frame.add(getSuedPanel(), BorderLayout.SOUTH);
+        frame.add(getNordlPanel(), BorderLayout.WEST);
 
         frame.setVisible(true);
 
     }
 
+    private Component getNordlPanel() {
+        list = new JList(); //data has type Object[]
+        list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        list.setVisibleRowCount(-1);
+        JScrollPane listScroller = new JScrollPane(list);
+        listScroller.setPreferredSize(new Dimension(250, 80));
+
+        return listScroller;
+    }
+
+
     private Component getSuedPanel() {
-        ArrayList<String> auswahlListe = new ArrayList<>();
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
+        List<String> auswahlListe = new ArrayList<>();
+
         JButton bSenden = new JButton("Senden");
         JButton bAbrechen = new JButton("Abrechen");
         String[] placeholder = {"","Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"};
@@ -49,13 +67,11 @@ public class SendFileGUI {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    label.setText((String) e.getItem());
-              auswahlListe.add((String) e.getItem());
-                   for(String s : auswahlListe){
-                       System.out.println(s);
-                   }
-                }}});
-        benutzerliste.setEditable( true );
+                    auswahlListe.add((String) e.getItem());
+                    addUser(auswahlListe.toArray());
+                }
+            }
+        });
 
         benutzerPanel.add(benutzerliste, BorderLayout.WEST);
         benutzerPanel.add(label, BorderLayout.WEST);
@@ -64,17 +80,26 @@ public class SendFileGUI {
         buttonPanel.add(bSenden);
         panel.add(buttonPanel, BorderLayout.EAST);
         panel.add(benutzerPanel, BorderLayout.WEST);
-
-
-
         panel.setBorder(BorderFactory.createLineBorder(frame.getContentPane().getBackground(), 10));
 
         return panel;
     }
 
+    private void addUser(Object[] newUser){
+        String[] s = new String[newUser.length];
+        for(int i = 0; i < s.length; i++){
+            s[i] = newUser[i].toString();
+        }
+        list.setListData(s);
+    }
+
+
+
     private Component getMittelPanel() {
         JScrollPane mittelScrollPane = new JScrollPane();
         mittelScrollPane.setLayout(new ScrollPaneLayout());
+
+
         mittelScrollPane.setBorder(
                 new CompoundBorder(
                         BorderFactory.createEmptyBorder(10, 10, 10, 10),
