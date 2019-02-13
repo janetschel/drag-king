@@ -7,9 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-/**
- * @author tz
- */
 public class Datei {
     private String dateiName;
 

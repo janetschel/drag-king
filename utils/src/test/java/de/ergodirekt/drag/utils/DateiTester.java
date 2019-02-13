@@ -1,17 +1,4 @@
-import de.ergodirekt.drag.utils.Datei;
-
-/**
- * Invariante: Ändere diese Klasse nicht!
- *
- * 1. Mach IntelliJ glücklich!
- *
- * 2. Sorge dafür das der Fehler nicht ausgegeben wird.
- *
- * 3. Optional: die Zusatzaufgabe
- *
- * @author fk
- *
- */
+package de.ergodirekt.drag.utils;
 public class DateiTester {
 
 
