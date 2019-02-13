@@ -17,7 +17,7 @@ public class ReceiveFileGUI {
     private JFrame frame;
     private JLabel statusLabel;
 
-    private ReceiveFileGUI() {
+    public ReceiveFileGUI() {
         frame = new JFrame();
         frame.setLayout(new BorderLayout());
         statusLabel = new JLabel();
@@ -55,7 +55,7 @@ public class ReceiveFileGUI {
 
     private void dragNDrop(MouseEvent mEvt) {
         java.util.List<String> selectedItems = new ArrayList<>();
-        for (IconLabel icon : iconList) {
+        for (IconPanel icon : iconList) {
             if (icon.isClicked()) {
                 selectedItems.add(icon.getFilePath());
             }

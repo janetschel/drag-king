@@ -32,7 +32,6 @@ public class SendFileGUI {
         frame.add(getSuedPanel(), BorderLayout.SOUTH);
 
         frame.setVisible(true);
-
     }
 
     private Component getSuedPanel() {
@@ -155,33 +154,6 @@ public class SendFileGUI {
         hilfe.addActionListener(e -> hilfe());
         uber.addActionListener(e -> uber());
         return bar;
-    }
-
-    private void hilfe() {
-         new HilfeGUI(frame);
-
-    }
-    private void uber() {
-        new UeberUnsGUI(frame);
-
-    }
-
-
-    private void neu() {
-        new GruppenNeuGUI(frame);
-
-    }
-    private void loschen() {
-        new GruppenLoeschenGUI(frame);
-
-    }
-    private void bearbeiten() {
-        new GruppenBearbeitenGUI(frame);
-
-    }
-
-    private void eignschaften() {
-        new EigenschaftenGUI(frame);
     }
 
 
