@@ -1,4 +1,4 @@
-package de.ergodirekt.drag.services;
+package de.ergodirekt.drag.utils.fileicon;
 
 import de.ergodirekt.drag.utils.DragException;
 
