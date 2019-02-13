@@ -1,4 +1,4 @@
-package de.ergodirekt.drag.services;
+package de.ergodirekt.drag.utils.fileicon;
 
 import me.marnic.jiconextract.extractor.IconSize;
 import me.marnic.jiconextract.extractor.JIconExtractor;
@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 
 public abstract class GetIconFromFilePath {
+    private static final int FILEPATH = 1;
+
     /**
      * Gibt das ImageIcon zur Datei - skaliert auf width und height - zurück
      * @param filePath Pfad zu der Datei
@@ -18,6 +20,7 @@ public abstract class GetIconFromFilePath {
      * @throws DateiExistiertNichtException, wenn die Standarddatei nicht existiert
      */
     public static ImageIcon getIconFromFilePath(String filePath, int width, int height) throws DateiExistiertNichtException {
+        String standardFilePath;
         BufferedImage image;
         String[] filePathParts = filePath.split("\\.");
         String fileEnding = "." + (filePathParts.length > 1 ? filePathParts[filePathParts.length - 1] : "");
@@ -26,7 +29,8 @@ public abstract class GetIconFromFilePath {
             image = JIconExtractor.getJIconExtractor().extractIconFromFile(fileEnding, IconSize.JUMBO);
         }else{
             try {
-                image = ImageIO.read(new File("gui/src/main/java/de/ergodirekt/drag/services/ico/folder.png"));
+                standardFilePath = GetIconFromFilePath.class.getClassLoader().getResource("icons/folder.png").toString().split("^file:/")[FILEPATH];
+                image = ImageIO.read(new File(standardFilePath));
             } catch (IOException e) {
                 throw new DateiExistiertNichtException("ICO Datei für Ordner existiert nicht!");
             }
