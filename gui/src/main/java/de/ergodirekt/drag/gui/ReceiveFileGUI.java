@@ -3,6 +3,7 @@ package de.ergodirekt.drag.gui;
 import de.ergodirekt.drag.logic.ListTransferHandler;
 import de.ergodirekt.drag.utils.Files;
 import de.ergodirekt.drag.utils.fileicon.DateiExistiertNichtException;
+import de.ergodirekt.drag.utils.fileicon.GetIconFromFilePath;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -99,6 +100,14 @@ public class ReceiveFileGUI {
 
         for (int i = 0; i < iconList.length; i++) {
             iconPanel.add(iconList[i].getAsJPanel(), gbcList.get(i));
+        }
+        //TODO
+        iconPanel = new JPanel();
+
+        try {
+            iconPanel.add(new JLabel(GetIconFromFilePath.getIconFromFilePath(".java")));
+        } catch (DateiExistiertNichtException e) {
+            e.printStackTrace();
         }
 
         JScrollPane iconScrollPane = new JScrollPane(iconPanel);
