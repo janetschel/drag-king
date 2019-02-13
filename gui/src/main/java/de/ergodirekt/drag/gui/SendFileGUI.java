@@ -162,7 +162,7 @@ public class SendFileGUI {
 
     }
     private void uber() {
-        new UberGUI(frame);
+        new UeberUnsGUI(frame);
 
     }
 
@@ -172,7 +172,7 @@ public class SendFileGUI {
 
     }
     private void loschen() {
-        new GruppenLoschenGUI(frame);
+        new GruppenLoeschenGUI(frame);
 
     }
     private void bearbeiten() {
@@ -181,7 +181,7 @@ public class SendFileGUI {
     }
 
     private void eignschaften() {
-        new EigenscaftenGUI(frame);
+        new EigenschaftenGUI(frame);
     }
 
 

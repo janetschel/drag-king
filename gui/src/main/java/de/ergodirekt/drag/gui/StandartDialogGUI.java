@@ -3,19 +3,19 @@ package de.ergodirekt.drag.gui;
 import javax.swing.*;
 import java.awt.*;
 
-public class UberGUI extends JDialog {
+public class StandartDialogGUI extends JDialog {
 
-    public UberGUI(JFrame fenster) {
+    public StandartDialogGUI(JFrame fenster, String fensterName) {
         super(fenster);
-        init();
+        init(fensterName);
         setLocationRelativeTo(fenster);
         setVisible(true);
     }
 
+    private void init(String fensterName) {
 
-    private void init() {
         getContentPane().setLayout(new GridBagLayout());
-        setTitle("Über");
+        setTitle(fensterName);
         setModal(true);
         setSize(400, 300);
 
