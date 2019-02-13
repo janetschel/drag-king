@@ -32,7 +32,6 @@ public class SendFileGUI {
         frame.add(getSuedPanel(), BorderLayout.SOUTH);
 
         frame.setVisible(true);
-
     }
 
     private Component getSuedPanel() {
@@ -40,7 +39,7 @@ public class SendFileGUI {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         JButton bSenden = new JButton("Senden");
-        JButton bAbrechen = new JButton("Abrechen");
+        JButton bAbrechen = new JButton("Abbrechen");
         String[] placeholder = {"","Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"};
         JPanel benutzerPanel = new JPanel();
         JLabel label = new JLabel();
@@ -64,8 +63,6 @@ public class SendFileGUI {
         buttonPanel.add(bSenden);
         panel.add(buttonPanel, BorderLayout.EAST);
         panel.add(benutzerPanel, BorderLayout.WEST);
-
-
 
         panel.setBorder(BorderFactory.createLineBorder(frame.getContentPane().getBackground(), 10));
 
@@ -104,14 +101,12 @@ public class SendFileGUI {
         return mittelScrollPane;
     }
 
-
     public static void main(String[] args) {
         new SendFileGUI();
     }
 
     private JMenuBar getMenue() {
         JMenuBar bar = new JMenuBar();
-
 
         JMenu einstellungen = new JMenu("Einstellungen");
         bar.add(einstellungen);
