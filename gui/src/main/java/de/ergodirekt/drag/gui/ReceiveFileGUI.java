@@ -36,7 +36,7 @@ public class ReceiveFileGUI {
         iconPanel = new JPanel();
         iconPanel.setLayout(new GridBagLayout());
 
-        java.util.List<String> filePaths = Files.getFilePathsFromDirectory("C:/"); //TODO Pfad auf Laufwerk
+        java.util.List<String> filePaths = Files.getFilePathsFromDirectory("C:/Users/Administrator/Desktop"); //TODO Pfad auf Laufwerk
 
         iconList = new IconPanel[filePaths.size()];
         for (int i = 0; i < filePaths.size(); i++) {
@@ -100,14 +100,6 @@ public class ReceiveFileGUI {
 
         for (int i = 0; i < iconList.length; i++) {
             iconPanel.add(iconList[i].getAsJPanel(), gbcList.get(i));
-        }
-        //TODO
-        iconPanel = new JPanel();
-
-        try {
-            iconPanel.add(new JLabel(GetIconFromFilePath.getIconFromFilePath(".java")));
-        } catch (DateiExistiertNichtException e) {
-            e.printStackTrace();
         }
 
         JScrollPane iconScrollPane = new JScrollPane(iconPanel);
