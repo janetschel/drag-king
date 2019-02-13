@@ -8,5 +8,7 @@ repositories {
 }
 
 dependencies {
+    compile files('../lib/JIconExtract.jar')
+    compile project(":utils")
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
