@@ -1,4 +1,4 @@
-package username;
+package de.ergodirekt.drag.utils;
 
 
 import java.io.BufferedReader;
