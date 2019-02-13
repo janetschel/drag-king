@@ -42,13 +42,11 @@ public abstract class GetIconFromFilePath {
 
     // Returnt ein Standard-BufferedImage, wenn kein anderes Icon existiert
     private static BufferedImage getStandardBufferedImage() throws DateiExistiertNichtException {
-        if (bufferedImage == null){
-            standardFile = getStandardFile();
-            try {
-                bufferedImage = ImageIO.read(standardFile);
-            } catch (IOException | IllegalArgumentException e) {
-                throw new DateiExistiertNichtException("ICO für Standarddatei existiert nicht!");
-            }
+        standardFile = getStandardFile();
+        try {
+            bufferedImage = ImageIO.read(standardFile);
+        } catch (IOException | IllegalArgumentException e) {
+            throw new DateiExistiertNichtException("ICO für Standarddatei existiert nicht!");
         }
         return bufferedImage;
     }

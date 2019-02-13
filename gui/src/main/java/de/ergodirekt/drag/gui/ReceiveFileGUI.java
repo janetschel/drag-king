@@ -3,6 +3,7 @@ package de.ergodirekt.drag.gui;
 import de.ergodirekt.drag.logic.ListTransferHandler;
 import de.ergodirekt.drag.utils.Files;
 import de.ergodirekt.drag.utils.fileicon.DateiExistiertNichtException;
+import de.ergodirekt.drag.utils.fileicon.GetIconFromFilePath;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -16,8 +17,12 @@ public class ReceiveFileGUI {
     private static final int ICONS_PER_ROW = 4;
     private JFrame frame;
     private JLabel statusLabel;
+    private IconPanel[] iconList;
+    private JPanel iconPanel;
+    private boolean isMousePressed = false;
+    private StringBuilder errorMessage = new StringBuilder();
 
-    private ReceiveFileGUI() {
+    public ReceiveFileGUI() {
         frame = new JFrame();
         frame.setLayout(new BorderLayout());
         statusLabel = new JLabel();
@@ -26,23 +31,85 @@ public class ReceiveFileGUI {
         initFrame();
     }
 
-    private JLabel getCenter() {
-        ImageIcon icon = new ImageIcon(System.getProperty("user.dir") + "/images/Icon.png"); //TODO Icon der Datei auf dem Public Laufwerk
-        JLabel label = new JLabel(icon);
-        try {
-            label.setTransferHandler(new ListTransferHandler(getSelectedItems()));
-        } catch (FileNotFoundException e) {
-            statusLabel.setText(e.getMessage());
-        }
-        label.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent mEvt) { //Notwendig, da Drag and Drop normalerweise mit Label nicht möglich
-                JComponent component = (JComponent) mEvt.getSource();
-                TransferHandler tHandler = component.getTransferHandler();
-                tHandler.exportAsDrag(component, mEvt, TransferHandler.COPY);
+    private JScrollPane getCenter() {
+        final int INSET = 5;
+        iconPanel = new JPanel();
+        iconPanel.setLayout(new GridBagLayout());
+
+        java.util.List<String> filePaths = Files.getFilePathsFromDirectory("C:/Users/Administrator/Desktop"); //TODO Pfad auf Laufwerk
+
+        iconList = new IconPanel[filePaths.size()];
+        for (int i = 0; i < filePaths.size(); i++) {
+            int iconNumber = i;
+            try {
+                iconList[i] = new IconPanel(filePaths.get(i));
+            } catch (DateiExistiertNichtException e) {
+                errorMessage.append(errorMessage.toString().equals("") ? ListTransferHandler.ERROR_MESSAGE : "");
+                errorMessage.append(filePaths.get(i)).append("<br/>");
             }
-        });
-        return(label);
+
+            iconList[i].getAsJPanel().addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent mEvt) {
+                    new Thread(() -> {
+                        isMousePressed = true;
+                        while (isMousePressed) {
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                errorMessage.append(errorMessage.toString().equals("") ? "<html>" : "");
+                                errorMessage.append("<br/>").append(e.getMessage()).append("<br/>");
+                            }
+
+                            if (isMousePressed) {
+                                dragNDrop(mEvt);
+                                isMousePressed = false;
+                            } else {
+                                iconList[iconNumber].switchClicked();
+                            }
+                        }
+                    }).start();
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent mEvt) {
+                    isMousePressed = false;
+                }
+            });
+        }
+
+        if (!errorMessage.toString().equals("")) {
+            statusLabel.setText(errorMessage.toString() + "</html>");
+        }
+
+        java.util.List<GridBagConstraints> gbcList = new ArrayList<>();
+
+
+
+        int helper = ((float) iconList.length / ICONS_PER_ROW) % 1 == 0 ? iconList.length / ICONS_PER_ROW : iconList.length / ICONS_PER_ROW + 1;
+        GridBagConstraints gbc;
+        for (int j = 0; j < helper; j++) {
+            for (int i = 0; i < ICONS_PER_ROW; i++) {
+                gbc = new GridBagConstraints();
+                gbc.gridx = i;
+                gbc.gridy = j;
+                gbc.insets = new Insets(INSET,INSET,INSET,INSET);
+                gbcList.add(gbc);
+            }
+        }
+
+        for (int i = 0; i < iconList.length; i++) {
+            iconPanel.add(iconList[i].getAsJPanel(), gbcList.get(i));
+        }
+
+        JScrollPane iconScrollPane = new JScrollPane(iconPanel);
+        iconScrollPane.setPreferredSize(
+                new Dimension(
+                        ICONS_PER_ROW*(IconPanel.ICON_WIDTH + 2*INSET)
+                                + 20 /*Spacing an Seite*/,
+                        400));
+        iconScrollPane.getVerticalScrollBar().setUnitIncrement(20);
+        return(iconScrollPane);
     }
 
     private void initFrame() {
@@ -55,7 +122,7 @@ public class ReceiveFileGUI {
 
     private void dragNDrop(MouseEvent mEvt) {
         java.util.List<String> selectedItems = new ArrayList<>();
-        for (IconLabel icon : iconList) {
+        for (IconPanel icon : iconList) {
             if (icon.isClicked()) {
                 selectedItems.add(icon.getFilePath());
             }

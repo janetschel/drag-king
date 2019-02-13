@@ -11,6 +11,8 @@ import java.util.List;
 
 public class ListTransferHandler extends TransferHandler {
     private ArrayList<File> files;
+    private ReceiveFileGUI gui;
+    public static final String ERROR_MESSAGE = "<html>Folgende Dateien konnten nicht gefunden werden:<br/>";
 
     public ListTransferHandler(ReceiveFileGUI gui, List<String> selectedItems) throws FileNotFoundException {
         this.gui = gui;

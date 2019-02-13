@@ -6,7 +6,7 @@ import de.ergodirekt.drag.utils.fileicon.GetIconFromFilePath;
 import javax.swing.*;
 import java.awt.*;
 
-class IconLabel {
+class IconPanel {
     private boolean clicked = true;
     private JPanel iconPanel;
     private String filePath;
@@ -14,9 +14,10 @@ class IconLabel {
     private static final Color UNCLICKED_COLOR = null;
     static final int ICON_WIDTH = 90;
 
-    IconLabel(String filePath) throws DateiExistiertNichtException {
+    IconPanel(String filePath) throws DateiExistiertNichtException {
         this.filePath = filePath;
         iconPanel = new JPanel(new BorderLayout());
+        System.out.println(filePath);
         iconPanel.add(new JLabel(GetIconFromFilePath.getIconFromFilePath(filePath, 70, 70)), BorderLayout.NORTH);
         String[] filePathParts = filePath.replace("\\", "/").split("/");
         iconPanel.add(new JLabel(filePathParts[filePathParts.length-1], SwingConstants.CENTER), BorderLayout.CENTER);
