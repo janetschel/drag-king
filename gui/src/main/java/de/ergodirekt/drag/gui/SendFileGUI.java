@@ -1,7 +1,5 @@
 package de.ergodirekt.drag.gui;
 
-import javax.swing.*;
-import javax.swing.border.CompoundBorder;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -15,7 +13,9 @@ import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
+
+import javax.swing.*;
+import javax.swing.border.CompoundBorder;
 
 public class SendFileGUI {
     private JFrame frame;
@@ -44,7 +44,7 @@ public class SendFileGUI {
         list = new JList(); //data has type Object[]
         list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        list.setVisibleRowCount(-1);
+        //list.setVisibleRowCount(-1);
         JScrollPane listScroller = new JScrollPane(list);
         listScroller.setPreferredSize(new Dimension(250, 80));
 
@@ -67,8 +67,12 @@ public class SendFileGUI {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    auswahlListe.add((String) e.getItem());
-                    addUser(auswahlListe.toArray());
+                    String auswahl = (String) e.getItem();
+                    if (!auswahlListe.contains(auswahl)) {
+                        auswahlListe.add(auswahl);
+                        addUser(auswahlListe.toArray());
+
+                    }
                 }
             }
         });
