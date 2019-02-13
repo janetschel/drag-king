@@ -17,12 +17,12 @@ class IconPanel {
     IconPanel(String filePath) throws DateiExistiertNichtException {
         this.filePath = filePath;
         iconPanel = new JPanel(new BorderLayout());
-        System.out.println(filePath);
         iconPanel.add(new JLabel(GetIconFromFilePath.getIconFromFilePath(filePath, 70, 70)), BorderLayout.NORTH);
         String[] filePathParts = filePath.replace("\\", "/").split("/");
         iconPanel.add(new JLabel(filePathParts[filePathParts.length-1], SwingConstants.CENTER), BorderLayout.CENTER);
         iconPanel.setPreferredSize(new Dimension(ICON_WIDTH,100));
         iconPanel.setBackground(CLICKED_COLOR);
+        iconPanel.setToolTipText(filePath);
     }
 
     void switchClicked() {
