@@ -50,7 +50,6 @@ public abstract class GetIconFromFilePath {
         return getIconFromFilePath(filePath, 0, 0);
     }
 
-
     // Returnt ein Standard-BufferedImage, wenn kein anderes Icon existiert
     private static BufferedImage getStandardBufferedImage() throws DateiExistiertNichtException {
         if (bufferedImage == null){
