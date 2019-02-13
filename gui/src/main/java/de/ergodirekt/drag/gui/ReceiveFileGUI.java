@@ -44,7 +44,7 @@ public class ReceiveFileGUI {
                 iconList[i] = new IconPanel(filePaths.get(i));
             } catch (DateiExistiertNichtException e) {
                 errorMessage.append(errorMessage.toString().equals("") ? ListTransferHandler.ERROR_MESSAGE : "");
-                errorMessage.append(iconList[i].getFilePath()).append("<br/>");
+                errorMessage.append(filePaths.get(i)).append("<br/>");
             }
 
             iconList[i].getAsJPanel().addMouseListener(new MouseAdapter() {
