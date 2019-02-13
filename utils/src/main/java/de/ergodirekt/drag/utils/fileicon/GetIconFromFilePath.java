@@ -14,14 +14,6 @@ public abstract class GetIconFromFilePath {
     private static File standardFile = null;
     private static BufferedImage bufferedImage;
 
-    public static void main(String[] args) {
-        try {
-            getIconFromFilePath("");
-        } catch (DateiExistiertNichtException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * Gibt das ImageIcon zur Datei - skaliert auf width und height - zurück
      * @param filePath Pfad zu der Datei
@@ -34,9 +26,7 @@ public abstract class GetIconFromFilePath {
         String[] filePathParts = filePath.split("\\.");
         String fileEnding = "." + (filePathParts.length > 1 ? filePathParts[filePathParts.length - 1] : "");
 
-        if(!fileEnding.equals(".")) bufferedImage = JIconExtractor.getJIconExtractor().extractIconFromFile(fileEnding, IconSize.JUMBO);
-        else bufferedImage = getStandardBufferedImage();
-
+        bufferedImage = !fileEnding.equals(".") ? JIconExtractor.getJIconExtractor().extractIconFromFile(fileEnding, IconSize.JUMBO) : getStandardBufferedImage();
         return new ImageIcon(width == 0 || height == 0 ? bufferedImage : bufferedImage.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH), null);
     }
 
