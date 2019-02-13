@@ -24,8 +24,8 @@ public class Datei {
 
     public void schreibe(String txt, boolean append) {
 
-        String folderPath = "T:\\Friedrich\\Projekt\\properties\\test.txt";
-        File file = new File(folderPath);
+
+        File file = new File(dateiName);
         File datei = null;
         datei = new File(dateiName);
         try (FileWriter outStream = new FileWriter(datei, append)){
