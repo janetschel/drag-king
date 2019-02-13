@@ -1,6 +1,8 @@
 package de.ergodirekt.drag.gui;
 
 import de.ergodirekt.drag.logic.ListTransferHandler;
+import de.ergodirekt.drag.utils.Files;
+import de.ergodirekt.drag.utils.fileicon.DateiExistiertNichtException;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -9,16 +11,18 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javax.swing.*;
 
+
 public class ReceiveFileGUI {
-    private JDialog dialog;
+    private static final int ICONS_PER_ROW = 4;
+    private JFrame frame;
     private JLabel statusLabel;
 
-    public ReceiveFileGUI() {
-        dialog = new JDialog();
-        dialog.setLayout(new BorderLayout());
+    private ReceiveFileGUI() {
+        frame = new JFrame();
+        frame.setLayout(new BorderLayout());
         statusLabel = new JLabel();
-        dialog.add(getCenter(), BorderLayout.CENTER);
-        dialog.add(statusLabel, BorderLayout.SOUTH);
+        frame.add(getCenter(), BorderLayout.CENTER);
+        frame.add(statusLabel, BorderLayout.SOUTH);
         initFrame();
     }
 
@@ -42,24 +46,39 @@ public class ReceiveFileGUI {
     }
 
     private void initFrame() {
-        dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE) ;
-        dialog.setTitle("Ihnen wurden Dateien geschickt!");
-        dialog.setSize(300,300);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE) ;
+        frame.setTitle("Ihnen wurden Dateien geschickt!");
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 
-    private java.util.List<String> getSelectedItems() { //TODO wirklich ausgewählte Pfade hinzufügen
+    private void dragNDrop(MouseEvent mEvt) {
         java.util.List<String> selectedItems = new ArrayList<>();
-        selectedItems.add(System.getProperty("user.dir") + "/images/Icon.png");
-        selectedItems.add(System.getProperty("user.dir") + "/images/Icon2.png");
-        selectedItems.add(System.getProperty("user.dir") + "/images/ThisDoesNotExist.png"); //Soll nicht gefunden werden
-
-        return selectedItems;
+        for (IconLabel icon : iconList) {
+            if (icon.isClicked()) {
+                selectedItems.add(icon.getFilePath());
+            }
+        }
+        statusLabel.setText(addTransferHandler(iconPanel, selectedItems));
+        TransferHandler tHandler = iconPanel.getTransferHandler();
+        tHandler.exportAsDrag(iconPanel, mEvt, TransferHandler.COPY);
     }
 
-    public static void main(String[] args)
-    {
+    private String addTransferHandler(JComponent component, java.util.List<String> selectedItems) {
+        try {
+            component.setTransferHandler(new ListTransferHandler(this, selectedItems));
+        } catch (FileNotFoundException e) {
+            return e.getMessage();
+        }
+        return null;
+    }
+
+    public void setMousePressed(boolean mousePressed) {
+        isMousePressed = mousePressed;
+    }
+
+    public static void main(String[] args) {
         new ReceiveFileGUI();
     }
 }
