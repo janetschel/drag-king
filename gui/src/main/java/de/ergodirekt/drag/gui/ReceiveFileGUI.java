@@ -1,9 +1,11 @@
 package de.ergodirekt.drag.gui;
 
+import com.sun.javafx.logging.JFRInputEvent;
 import de.ergodirekt.drag.logic.ListTransferHandler;
 import de.ergodirekt.drag.utils.FileWatcher;
 import de.ergodirekt.drag.utils.FileWatcherListener;
 import de.ergodirekt.drag.utils.Files;
+import de.ergodirekt.drag.utils.GridBagConstraintsCreator;
 import de.ergodirekt.drag.utils.fileicon.DateiExistiertNichtException;
 
 import java.awt.*;
@@ -15,10 +17,11 @@ import javax.swing.*;
 
 public class ReceiveFileGUI implements FileWatcherListener{
     private static final int ICONS_PER_ROW = 4;
+    private JFrame frame;
     private String filePath;
     private JLabel statusLabel;
     private IconPanel[] iconList;
-    private JPanel iconPanel;
+    private JPanel iconsPanel;
     private boolean isMousePressed = false;
     private StringBuilder errorMessage = new StringBuilder();
 
@@ -29,17 +32,20 @@ public class ReceiveFileGUI implements FileWatcherListener{
 
     private JScrollPane getCenter(String filePath) {
         final int INSET = 5;
-        iconPanel = new JPanel();
-        iconPanel.setLayout(new GridBagLayout());
+        iconsPanel = new JPanel();
+        iconsPanel.setLayout(new GridBagLayout());
 
         java.util.List<String> filePaths = Files.getFilePathsFromDirectory(filePath);
+
+        java.util.List<GridBagConstraints> gbcList = GridBagConstraintsCreator.createGridBagConstraints(filePaths, ICONS_PER_ROW);
+
 
         iconList = new IconPanel[filePaths.size()];
         for (int i = 0; i < filePaths.size(); i++) {
             int iconNumber = i;
             try {
                 iconList[i] = new IconPanel(filePaths.get(i));
-                iconList[i].getAsJPanel().addMouseListener(new MouseAdapter() {
+                iconList[i].addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent mEvt) {
                         new Thread(() -> {
@@ -76,37 +82,25 @@ public class ReceiveFileGUI implements FileWatcherListener{
         if (!errorMessage.toString().equals("")) {
             statusLabel.setText(errorMessage.toString() + "</html>");
         } else {
-            java.util.List<GridBagConstraints> gbcList = new ArrayList<>();
 
-            int helper = ((float) iconList.length / ICONS_PER_ROW) % 1 == 0 ? iconList.length / ICONS_PER_ROW : iconList.length / ICONS_PER_ROW + 1;
-            GridBagConstraints gbc;
-            for (int j = 0; j < helper; j++) {
-                for (int i = 0; i < ICONS_PER_ROW; i++) {
-                    gbc = new GridBagConstraints();
-                    gbc.gridx = i;
-                    gbc.gridy = j;
-                    gbc.insets = new Insets(INSET, INSET, INSET, INSET);
-                    gbcList.add(gbc);
-                }
-            }
 
             for (int i = 0; i < iconList.length; i++) {
-                iconPanel.add(iconList[i].getAsJPanel(), gbcList.get(i));
+                iconsPanel.add(iconList[i], gbcList.get(i));
             }
         }
 
-        JScrollPane iconScrollPane = new JScrollPane(iconPanel);
+        JScrollPane iconScrollPane = new JScrollPane(iconsPanel);
         iconScrollPane.setPreferredSize(
                 new Dimension(
                         ICONS_PER_ROW*(IconPanel.ICON_WIDTH + 2*INSET)
                                 + 20 /*Spacing an Seite*/,
                         400));
         iconScrollPane.getVerticalScrollBar().setUnitIncrement(20);
-        return(iconScrollPane);
+        return iconScrollPane;
     }
 
     private void initFrame() {
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setLayout(new BorderLayout());
 
         statusLabel = new JLabel();
@@ -130,9 +124,9 @@ public class ReceiveFileGUI implements FileWatcherListener{
                 selectedItems.add(icon.getFilePath());
             }
         }
-        statusLabel.setText(addTransferHandler(iconPanel, selectedItems));
-        TransferHandler tHandler = iconPanel.getTransferHandler();
-        tHandler.exportAsDrag(iconPanel, mEvt, TransferHandler.COPY);
+        statusLabel.setText(addTransferHandler(iconsPanel, selectedItems));
+        TransferHandler tHandler = iconsPanel.getTransferHandler();
+        tHandler.exportAsDrag(iconsPanel, mEvt, TransferHandler.COPY);
     }
 
     private String addTransferHandler(JComponent component, java.util.List<String> selectedItems) {
@@ -150,6 +144,7 @@ public class ReceiveFileGUI implements FileWatcherListener{
 
     @Override
     public void hasFileChanged(boolean folderChanged) {
+        if (frame != null) frame.dispose();
         initFrame();
     }
 }

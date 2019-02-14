@@ -6,9 +6,8 @@ import de.ergodirekt.drag.utils.fileicon.GetIconFromFilePath;
 import javax.swing.*;
 import java.awt.*;
 
-class IconPanel {
+class IconPanel extends JPanel {
     private boolean clicked = true;
-    private JPanel iconPanel;
     private String filePath;
     private static final Color CLICKED_COLOR = new Color(0x6076afe8);
     private static final Color UNCLICKED_COLOR = null;
@@ -16,22 +15,24 @@ class IconPanel {
 
     IconPanel(String filePath) throws DateiExistiertNichtException {
         this.filePath = filePath;
-        iconPanel = new JPanel(new BorderLayout());
-        iconPanel.add(new JLabel(GetIconFromFilePath.getIconFromFilePath(filePath, 70, 70)), BorderLayout.NORTH);
+        new JPanel(new BorderLayout());
+        add(new JLabel(GetIconFromFilePath.getIconFromFilePath(filePath, 70, 70)), BorderLayout.NORTH);
+
         String[] filePathParts = filePath.replace("\\", "/").split("/");
-        iconPanel.add(new JLabel(filePathParts[filePathParts.length-1], SwingConstants.CENTER), BorderLayout.CENTER);
-        iconPanel.setPreferredSize(new Dimension(ICON_WIDTH,100));
-        iconPanel.setBackground(CLICKED_COLOR);
-        iconPanel.setToolTipText(filePath);
+        String fileName = filePathParts[filePathParts.length-1];
+
+        JLabel iconText = new JLabel(fileName, SwingConstants.CENTER);
+        iconText.setPreferredSize(new Dimension(ICON_WIDTH,20));
+        add(iconText, BorderLayout.CENTER);
+
+        setPreferredSize(new Dimension(ICON_WIDTH,100));
+        setBackground(CLICKED_COLOR);
+        setToolTipText(fileName);
     }
 
     void switchClicked() {
         this.clicked = !this.clicked;
-        iconPanel.setBackground(clicked ? CLICKED_COLOR : UNCLICKED_COLOR);
-    }
-
-    JPanel getAsJPanel() {
-        return iconPanel;
+        setBackground(clicked ? CLICKED_COLOR : UNCLICKED_COLOR);
     }
 
     boolean isClicked() {
