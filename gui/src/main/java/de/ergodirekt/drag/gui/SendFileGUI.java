@@ -142,7 +142,6 @@ public class SendFileGUI {
                 }
             }
         });
-        iconScrollPane.getViewport().setBackground(new Color(0xffffffff));
 
         return iconScrollPane;
     }

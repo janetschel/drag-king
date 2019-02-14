@@ -87,6 +87,8 @@ public class ReceiveFileGUI implements FileWatcherListener{
             }
         }
 
+        iconsPanel.setBackground(new Color(0xffffffff));
+
         JScrollPane iconScrollPane = new JScrollPane(iconsPanel);
         iconScrollPane.setPreferredSize(
                 new Dimension(
