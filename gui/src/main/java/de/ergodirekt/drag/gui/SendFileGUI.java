@@ -214,7 +214,7 @@ public class SendFileGUI {
         component.setBorder(
                 new CompoundBorder(
                         BorderFactory.createEmptyBorder(10, 10, 10, 10),
-                        BorderFactory.createLineBorder(new Color(0xdd444444), 1)
+                        BorderFactory.createLineBorder(Color.GRAY, 1)
                 )
         );
     }
