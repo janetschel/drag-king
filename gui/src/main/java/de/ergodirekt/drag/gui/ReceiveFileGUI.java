@@ -71,7 +71,6 @@ public class ReceiveFileGUI {
                     }
                 });
             } catch (DateiExistiertNichtException e) {
-                System.out.println("HI");
                 errorMessage.append(errorMessage.toString().equals("") ? ListTransferHandler.ERROR_MESSAGE : "");
                 errorMessage.append(filePaths.get(i)).append("<br/>");
             }
@@ -80,27 +79,25 @@ public class ReceiveFileGUI {
 
         if (!errorMessage.toString().equals("")) {
             statusLabel.setText(errorMessage.toString() + "</html>");
-        }
+        } else {
+            java.util.List<GridBagConstraints> gbcList = new ArrayList<>();
 
-        java.util.List<GridBagConstraints> gbcList = new ArrayList<>();
-
-        int helper = ((float) iconList.length / ICONS_PER_ROW) % 1 == 0 ? iconList.length / ICONS_PER_ROW : iconList.length / ICONS_PER_ROW + 1;
-        GridBagConstraints gbc;
-        for (int j = 0; j < helper; j++) {
-            for (int i = 0; i < ICONS_PER_ROW; i++) {
-                gbc = new GridBagConstraints();
-                gbc.gridx = i;
-                gbc.gridy = j;
-                gbc.insets = new Insets(INSET,INSET,INSET,INSET);
-                gbcList.add(gbc);
+            int helper = ((float) iconList.length / ICONS_PER_ROW) % 1 == 0 ? iconList.length / ICONS_PER_ROW : iconList.length / ICONS_PER_ROW + 1;
+            GridBagConstraints gbc;
+            for (int j = 0; j < helper; j++) {
+                for (int i = 0; i < ICONS_PER_ROW; i++) {
+                    gbc = new GridBagConstraints();
+                    gbc.gridx = i;
+                    gbc.gridy = j;
+                    gbc.insets = new Insets(INSET, INSET, INSET, INSET);
+                    gbcList.add(gbc);
+                }
             }
-        }
 
-        try {
             for (int i = 0; i < iconList.length; i++) {
                 iconPanel.add(iconList[i].getAsJPanel(), gbcList.get(i));
             }
-        } catch (NullPointerException ignored) {}
+        }
 
         JScrollPane iconScrollPane = new JScrollPane(iconPanel);
         iconScrollPane.setPreferredSize(
