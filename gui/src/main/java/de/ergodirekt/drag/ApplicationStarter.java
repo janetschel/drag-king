@@ -9,6 +9,6 @@ import de.ergodirekt.drag.gui.SendFileGUI;
 public class ApplicationStarter {
     public static void main(String[] args) {
         new SendFileGUI();
-        new ReceiveFileGUI("C:/Users/Administrator/Desktop");
+        new ReceiveFileGUI(System.getProperty("user.home"));
     }
 }

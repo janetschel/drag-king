@@ -30,7 +30,6 @@ public class FileWatcher implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Checking for new Files  :)  ");
         Path path = Paths.get(pfad);
 
         while (running) {

@@ -110,11 +110,16 @@ public class ReceiveFileGUI implements FileWatcherListener{
     }
 
     private void initFrame() {
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE) ;
+        frame.add(getCenter(filePath), BorderLayout.CENTER);
+        frame.add(statusLabel, BorderLayout.SOUTH);
+
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setTitle("Ihnen wurden Dateien geschickt!");
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        frame.setAlwaysOnTop(true);
+        frame.setAlwaysOnTop(false);
     }
 
     private void dragNDrop(MouseEvent mEvt) {
@@ -144,8 +149,6 @@ public class ReceiveFileGUI implements FileWatcherListener{
 
     @Override
     public void hasFileChanged(boolean folderChanged) {
-        frame.add(getCenter(filePath), BorderLayout.CENTER);
-        frame.add(statusLabel, BorderLayout.SOUTH);
         initFrame();
     }
 }
