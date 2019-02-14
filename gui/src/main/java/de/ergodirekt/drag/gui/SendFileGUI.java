@@ -24,7 +24,7 @@ public class SendFileGUI {
     public SendFileGUI() {
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);
+        frame.setSize(600, 500);
         frame.setMinimumSize(new Dimension(230, 200));
         frame.setTitle("Drag King");
         frame.setLocationRelativeTo(null);
@@ -142,75 +142,29 @@ public class SendFileGUI {
         JMenuBar bar = new JMenuBar();
 
 
-        JMenu einstellungen = new JMenu("Einstellungen");
-        bar.add(einstellungen);
-        JMenuItem eignschaften = new JMenuItem("Eigenschaften");
-        JMenu gruppen = new JMenu("Gruppenverwaltung");
-        JMenuItem neu = new JMenuItem("Neu");
-        JMenuItem loschen = new JMenuItem("Löschen");
-        JMenuItem bearbeiten = new JMenuItem("Bearbeiten");
+        JMenu beenden = new JMenu("Beenden");
+        bar.add(beenden);
+        JMenuItem beenden1 = new JMenuItem("Beenden");
 
-     /*   submenu = new JMenu("A submenu");
-        submenu.setMnemonic(KeyEvent.VK_S);
+        beenden1.addActionListener(e -> System.exit(0));
+        beenden.add(beenden1);
 
-        menuItem = new JMenuItem("An item in the submenu");
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_2, ActionEvent.ALT_MASK));
-        submenu.add(menuItem);*/
-
-
-
-        einstellungen.add(eignschaften);
-        einstellungen.addSeparator();
-        einstellungen.add(gruppen);
-        gruppen.add(neu);
-        gruppen.add(bearbeiten);
-        gruppen.add(loschen);
-
-
-        eignschaften.addActionListener(e -> eignschaften());
-        neu.addActionListener(e -> neu());
-        bearbeiten.addActionListener(e -> bearbeiten());
-        loschen.addActionListener(e -> loschen());
 
         JMenu info = new JMenu("Info");
         bar.add(info);
-        JMenuItem hilfe = new JMenuItem("Hilfe");
+
         JMenuItem uber = new JMenuItem("Über");
-        info.add(hilfe);
+
         info.add(uber);
 
-
-        hilfe.addActionListener(e -> hilfe());
         uber.addActionListener(e -> uber());
         return bar;
     }
 
-    private void hilfe() {
-         new HilfeGUI(frame);
 
-    }
     private void uber() {
         new UeberUnsGUI(frame);
 
-    }
-
-
-    private void neu() {
-        new GruppenNeuGUI(frame);
-
-    }
-    private void loschen() {
-        new GruppenLoeschenGUI(frame);
-
-    }
-    private void bearbeiten() {
-        new GruppenBearbeitenGUI(frame);
-
-    }
-
-    private void eignschaften() {
-        new EigenschaftenGUI(frame);
     }
 
 
