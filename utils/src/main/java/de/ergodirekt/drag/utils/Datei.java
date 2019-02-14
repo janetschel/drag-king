@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Datei {
     private String dateiName;
@@ -57,5 +59,19 @@ public class Datei {
             e.printStackTrace();
         }
         return inhalt.toString();
+    }
+
+    public static List<String> getFilePathsFromDirectory(String folderPath) {
+        File folder = new File(folderPath);
+        File[] listOfFiles = folder.listFiles();
+        List<String> listOfFilePaths = new ArrayList<>();
+
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                listOfFilePaths.add(file.getPath());
+            }
+        }
+
+        return listOfFilePaths;
     }
 }

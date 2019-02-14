@@ -26,8 +26,9 @@ public class SendFileGUI {
     private static final int INSET = 5;
     private JFrame frame;
     private JList<String> list;
-    private List<String> selectedFiles = new ArrayList<>();
+    private List<String> droppedFiles = new ArrayList<>();
     private String destinationFolder = System.getProperty("user.home").replace("\\", "/"); //TODO Ersetzen durch Pfad auf Zielordner
+    private JScrollPane iconScrollPane;
 
     public SendFileGUI() {
         frame = new JFrame();
@@ -67,7 +68,8 @@ public class SendFileGUI {
 
         JButton bSenden = new JButton("Senden");
         bSenden.addActionListener(e -> sendSelectedFiles());
-        JButton bAbrechen = new JButton("Abrechen");
+        JButton bLoeschen = new JButton("Löschen");
+        bLoeschen.addActionListener(e -> clearInputs());
         String[] placeholder = {"Bitte Benutzer auswählen","Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"};
         JPanel benutzerPanel = new JPanel();
         JLabel label = new JLabel();
@@ -86,7 +88,7 @@ public class SendFileGUI {
         benutzerPanel.add(benutzerliste, BorderLayout.WEST);
         benutzerPanel.add(label, BorderLayout.WEST);
         JPanel buttonPanel = new JPanel();
-        buttonPanel.add(bAbrechen);
+        buttonPanel.add(bLoeschen);
         buttonPanel.add(bSenden);
         panel.add(buttonPanel, BorderLayout.EAST);
         panel.add(benutzerPanel, BorderLayout.WEST);
@@ -104,7 +106,7 @@ public class SendFileGUI {
     }
 
     private JScrollPane getMittelScrollPane() {
-        JScrollPane iconScrollPane = new JScrollPane(getIconsPanel());
+        iconScrollPane = new JScrollPane();
         iconScrollPane.setPreferredSize(
                 new Dimension(
                         ICONS_PER_ROW*(IconPanel.ICON_WIDTH + 2*INSET)
@@ -127,7 +129,7 @@ public class SendFileGUI {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY);
                     try {
                         for (Object filePath : (List)tr.getTransferData(DataFlavor.javaFileListFlavor)) {
-                            selectedFiles.add(filePath.toString());
+                            droppedFiles.add(filePath.toString());
                             iconScrollPane.setViewportView(getIconsPanel());
                         }
                     } catch (UnsupportedFlavorException | IOException e) {
@@ -149,12 +151,12 @@ public class SendFileGUI {
         JPanel iconsPanel = new JPanel();
         iconsPanel.setLayout(new GridBagLayout());
 
-        java.util.List<GridBagConstraints> gbcList = GridBagConstraintsCreator.createGridBagConstraints(selectedFiles, ICONS_PER_ROW);
+        java.util.List<GridBagConstraints> gbcList = GridBagConstraintsCreator.createGridBagConstraints(droppedFiles, ICONS_PER_ROW);
 
-        IconPanel[] iconList = new IconPanel[selectedFiles.size()];
-        for (int i = 0; i < selectedFiles.size(); i++) {
+        IconPanel[] iconList = new IconPanel[droppedFiles.size()];
+        for (int i = 0; i < droppedFiles.size(); i++) {
             try {
-                iconList[i] = new IconPanel(selectedFiles.get(i));
+                iconList[i] = new IconPanel(droppedFiles.get(i));
                 iconList[i].switchClicked();
                 iconsPanel.add(iconList[i], gbcList.get(i));
             } catch (DateiExistiertNichtException e) {
@@ -200,7 +202,7 @@ public class SendFileGUI {
     }
 
     private void sendSelectedFiles() {
-        for (String file : selectedFiles) {
+        for (String file : droppedFiles) {
             String[] splitPath = file.replace("\\", "/").split("/");
             String fileName = splitPath[splitPath.length-1];
             try {
@@ -209,6 +211,11 @@ public class SendFileGUI {
                 showErrorDialog(e);
             }
         }
+    }
+
+    private void clearInputs() {
+        iconScrollPane.setViewportView(null);
+        droppedFiles = new ArrayList<>();
     }
 
     private void showErrorDialog(Throwable t) {
