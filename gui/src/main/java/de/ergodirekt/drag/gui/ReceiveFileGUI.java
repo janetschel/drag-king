@@ -3,7 +3,6 @@ package de.ergodirekt.drag.gui;
 import de.ergodirekt.drag.logic.ListTransferHandler;
 import de.ergodirekt.drag.utils.Files;
 import de.ergodirekt.drag.utils.fileicon.DateiExistiertNichtException;
-import de.ergodirekt.drag.utils.fileicon.GetIconFromFilePath;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -43,39 +42,40 @@ public class ReceiveFileGUI {
             int iconNumber = i;
             try {
                 iconList[i] = new IconPanel(filePaths.get(i));
+                iconList[i].getAsJPanel().addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent mEvt) {
+                        new Thread(() -> {
+                            isMousePressed = true;
+                            while (isMousePressed) {
+                                try {
+                                    Thread.sleep(100);
+                                } catch (InterruptedException e) {
+                                    errorMessage.append(errorMessage.toString().equals("") ? "<html>" : "");
+                                    errorMessage.append("<br/>").append(e.getMessage()).append("<br/>");
+                                }
+
+                                if (isMousePressed) {
+                                    dragNDrop(mEvt);
+                                    isMousePressed = false;
+                                } else {
+                                    iconList[iconNumber].switchClicked();
+                                }
+                            }
+                        }).start();
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent mEvt) {
+                        isMousePressed = false;
+                    }
+                });
             } catch (DateiExistiertNichtException e) {
+                System.out.println("HI");
                 errorMessage.append(errorMessage.toString().equals("") ? ListTransferHandler.ERROR_MESSAGE : "");
                 errorMessage.append(filePaths.get(i)).append("<br/>");
             }
 
-            iconList[i].getAsJPanel().addMouseListener(new MouseAdapter() {
-                @Override
-                public void mousePressed(MouseEvent mEvt) {
-                    new Thread(() -> {
-                        isMousePressed = true;
-                        while (isMousePressed) {
-                            try {
-                                Thread.sleep(100);
-                            } catch (InterruptedException e) {
-                                errorMessage.append(errorMessage.toString().equals("") ? "<html>" : "");
-                                errorMessage.append("<br/>").append(e.getMessage()).append("<br/>");
-                            }
-
-                            if (isMousePressed) {
-                                dragNDrop(mEvt);
-                                isMousePressed = false;
-                            } else {
-                                iconList[iconNumber].switchClicked();
-                            }
-                        }
-                    }).start();
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent mEvt) {
-                    isMousePressed = false;
-                }
-            });
         }
 
         if (!errorMessage.toString().equals("")) {
@@ -83,8 +83,6 @@ public class ReceiveFileGUI {
         }
 
         java.util.List<GridBagConstraints> gbcList = new ArrayList<>();
-
-
 
         int helper = ((float) iconList.length / ICONS_PER_ROW) % 1 == 0 ? iconList.length / ICONS_PER_ROW : iconList.length / ICONS_PER_ROW + 1;
         GridBagConstraints gbc;
@@ -98,9 +96,11 @@ public class ReceiveFileGUI {
             }
         }
 
-        for (int i = 0; i < iconList.length; i++) {
-            iconPanel.add(iconList[i].getAsJPanel(), gbcList.get(i));
-        }
+        try {
+            for (int i = 0; i < iconList.length; i++) {
+                iconPanel.add(iconList[i].getAsJPanel(), gbcList.get(i));
+            }
+        } catch (NullPointerException ignored) {}
 
         JScrollPane iconScrollPane = new JScrollPane(iconPanel);
         iconScrollPane.setPreferredSize(
