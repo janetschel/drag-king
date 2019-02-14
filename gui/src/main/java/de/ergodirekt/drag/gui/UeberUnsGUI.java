@@ -4,6 +4,8 @@ import com.sun.glass.ui.Size;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 public class UeberUnsGUI extends StandartDialogGUI {
 
@@ -34,6 +36,14 @@ public class UeberUnsGUI extends StandartDialogGUI {
     protected void initKomponenten() {
         getContentPane().setLayout(new BorderLayout());
         add(hauptPanel(), BorderLayout.CENTER);
+        Action closeAction = new AbstractAction(){
+            public void actionPerformed(ActionEvent e){
+                dispose();
+            }
+        };
 
+        KeyStroke esc = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0);
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(esc, "closex");
+        getRootPane().getActionMap().put("closex", closeAction);
     }
 }
