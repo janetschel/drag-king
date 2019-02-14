@@ -141,24 +141,29 @@ public class SendFileGUI {
     private JMenuBar getMenue() {
         JMenuBar bar = new JMenuBar();
 
-
         JMenu beenden = new JMenu("Beenden");
         bar.add(beenden);
-        JMenuItem beenden1 = new JMenuItem("Beenden");
 
+        JMenuItem beenden1 = new JMenuItem("Beenden");
         beenden1.addActionListener(e -> System.exit(0));
         beenden.add(beenden1);
-
 
         JMenu info = new JMenu("Info");
         bar.add(info);
 
+        JMenuItem hilfe = new JMenuItem("Hilfe");
+        info.add(hilfe);
+        hilfe.addActionListener(e -> hilfe());
+
         JMenuItem uber = new JMenuItem("Über");
-
         info.add(uber);
-
         uber.addActionListener(e -> uber());
+
         return bar;
+    }
+
+    private void hilfe() {
+        new HilfeGUI(frame);
     }
 
 
