@@ -1,5 +1,7 @@
 package de.ergodirekt.drag.gui;
 
+import de.ergodirekt.drag.utils.Copy;
+
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -10,6 +12,7 @@ import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +119,9 @@ public class SendFileGUI {
                 if (tr.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY);
                     try {
-                        System.out.println(dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor));
+                        for (Object filePath : (List)dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor)) {
+                            Copy.copyFolder(new File(filePath.toString()), new File("C:/Users/Administrator/Desktop/Ordner"));
+                        }
                     } catch (UnsupportedFlavorException | IOException e) {
                         e.printStackTrace();
                     }

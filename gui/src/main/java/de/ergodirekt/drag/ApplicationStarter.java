@@ -1,5 +1,6 @@
 package de.ergodirekt.drag;
 
+import de.ergodirekt.drag.gui.ReceiveFileGUI;
 import de.ergodirekt.drag.gui.SendFileGUI;
 
 /**
@@ -8,6 +9,6 @@ import de.ergodirekt.drag.gui.SendFileGUI;
 public class ApplicationStarter {
     public static void main(String[] args) {
         new SendFileGUI();
-        // TODO Hintergrund-Task für den Empfang starten
+        new ReceiveFileGUI(System.getProperty("user.home"));
     }
 }

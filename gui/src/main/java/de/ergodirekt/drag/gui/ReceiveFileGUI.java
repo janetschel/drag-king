@@ -1,6 +1,8 @@
 package de.ergodirekt.drag.gui;
 
 import de.ergodirekt.drag.logic.ListTransferHandler;
+import de.ergodirekt.drag.utils.FileWatcher;
+import de.ergodirekt.drag.utils.FileWatcherListener;
 import de.ergodirekt.drag.utils.Files;
 import de.ergodirekt.drag.utils.fileicon.DateiExistiertNichtException;
 
@@ -11,10 +13,9 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javax.swing.*;
 
-
-public class ReceiveFileGUI {
+public class ReceiveFileGUI implements FileWatcherListener{
     private static final int ICONS_PER_ROW = 4;
-    private JFrame frame;
+    private String filePath;
     private JLabel statusLabel;
     private IconPanel[] iconList;
     private JPanel iconPanel;
@@ -22,12 +23,8 @@ public class ReceiveFileGUI {
     private StringBuilder errorMessage = new StringBuilder();
 
     public ReceiveFileGUI(String filePath) {
-        frame = new JFrame();
-        frame.setLayout(new BorderLayout());
-        statusLabel = new JLabel();
-        frame.add(getCenter(filePath), BorderLayout.CENTER);
-        frame.add(statusLabel, BorderLayout.SOUTH);
-        initFrame();
+        this.filePath = filePath;
+        new FileWatcher(filePath, this);
     }
 
     private JScrollPane getCenter(String filePath) {
@@ -74,7 +71,6 @@ public class ReceiveFileGUI {
                 errorMessage.append(errorMessage.toString().equals("") ? ListTransferHandler.ERROR_MESSAGE : "");
                 errorMessage.append(filePaths.get(i)).append("<br/>");
             }
-
         }
 
         if (!errorMessage.toString().equals("")) {
@@ -110,11 +106,21 @@ public class ReceiveFileGUI {
     }
 
     private void initFrame() {
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE) ;
+        JFrame frame = new JFrame();
+        frame.setLayout(new BorderLayout());
+
+        statusLabel = new JLabel();
+
+        frame.add(getCenter(filePath), BorderLayout.CENTER);
+        frame.add(statusLabel, BorderLayout.SOUTH);
+
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setTitle("Ihnen wurden Dateien geschickt!");
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        frame.setAlwaysOnTop(true);
+        frame.setAlwaysOnTop(false);
     }
 
     private void dragNDrop(MouseEvent mEvt) {
@@ -140,5 +146,10 @@ public class ReceiveFileGUI {
 
     public void setMousePressed(boolean mousePressed) {
         isMousePressed = mousePressed;
+    }
+
+    @Override
+    public void hasFileChanged(boolean folderChanged) {
+        initFrame();
     }
 }

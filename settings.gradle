@@ -1,2 +1,2 @@
-rootProject.name = "drag-master"
+rootProject.name = "drag-king"
 include 'gui', 'utils'
