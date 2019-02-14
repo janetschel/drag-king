@@ -19,27 +19,23 @@ public class Copy {
                 copyFolder(srcFolderFile, destFolderFile);
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("Good bye2 ");
                 System.exit(1);
             }
         }
-        System.out.println("Cool 1 ");
     }
 
     private static void copyFolder(File src, File dest) throws IOException {
         if (src.isDirectory()) {
             if (!dest.exists()) {
                 dest.mkdir();
-                System.out.println(" copied from " + src + "  to " + dest);
             }
-            String files[] = src.list();
+            String[] files = src.list();
             for (String file : files) {
                 File srcFile = new File(src, file);
                 File destFile = new File(dest, file);
                 copyFolder(srcFile, destFile);
             }
         }else {
-
             try (InputStream in = new FileInputStream(src);
                  FileOutputStream out = new FileOutputStream(dest)) {
                 byte[] buffer = new byte[1024];
@@ -47,7 +43,6 @@ public class Copy {
                 while ((length = in.read(buffer)) > 0) {
                     out.write(buffer, 0, length);
                 }
-                System.out.println("copied from " + src + " to " + dest);
             }
         }
 

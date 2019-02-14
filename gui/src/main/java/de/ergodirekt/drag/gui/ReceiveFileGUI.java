@@ -7,6 +7,8 @@ import de.ergodirekt.drag.utils.fileicon.DateiExistiertNichtException;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javax.swing.*;
@@ -14,16 +16,16 @@ import javax.swing.*;
 public class ReceiveFileGUI implements FileWatcherListener{
     private static final int ICONS_PER_ROW = 4;
     private JFrame frame;
-    private String filePath;
+    private String folderPath;
     private JLabel statusLabel;
     private IconPanel[] iconList;
     private JPanel iconsPanel;
     private boolean isMousePressed = false;
     private StringBuilder errorMessage = new StringBuilder();
 
-    public ReceiveFileGUI(String filePath) {
-        this.filePath = filePath;
-        new FileWatcher(filePath, this);
+    public ReceiveFileGUI(String folderPath) {
+        this.folderPath = folderPath;
+        new FileWatcher(folderPath, this);
     }
 
     private JScrollPane getCenter(String filePath) {
@@ -85,6 +87,8 @@ public class ReceiveFileGUI implements FileWatcherListener{
             }
         }
 
+        iconsPanel.setBackground(new Color(0xffffffff));
+
         JScrollPane iconScrollPane = new JScrollPane(iconsPanel);
         iconScrollPane.setPreferredSize(
                 new Dimension(
@@ -99,13 +103,26 @@ public class ReceiveFileGUI implements FileWatcherListener{
         frame = new JFrame();
         frame.setLayout(new BorderLayout());
 
+
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent event) {
+                int selectedOption = JOptionPane.showConfirmDialog(frame, "Möchten Sie die empfangenen Dateien von ihrem Transferlaufwerk löschen?", "Dateien löschen?", JOptionPane.YES_NO_CANCEL_OPTION);
+                if (selectedOption == JOptionPane.YES_OPTION) {
+                    Datei.deleteAllFilesFromDirectory(folderPath);
+                    frame.dispose();
+                } else if (selectedOption == JOptionPane.NO_OPTION) {
+                    frame.dispose();
+                }
+            }
+        });
+        frame.setTitle("Ihnen wurden Dateien geschickt!");
+
         statusLabel = new JLabel();
 
-        frame.add(getCenter(filePath), BorderLayout.CENTER);
+        frame.add(getCenter(folderPath), BorderLayout.CENTER);
         frame.add(statusLabel, BorderLayout.SOUTH);
-
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setTitle("Ihnen wurden Dateien geschickt!");
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
