@@ -1,9 +1,11 @@
 package de.ergodirekt.drag.gui;
 
+import com.sun.javafx.logging.JFRInputEvent;
 import de.ergodirekt.drag.logic.ListTransferHandler;
 import de.ergodirekt.drag.utils.FileWatcher;
 import de.ergodirekt.drag.utils.FileWatcherListener;
 import de.ergodirekt.drag.utils.Files;
+import de.ergodirekt.drag.utils.GridBagConstraintsCreator;
 import de.ergodirekt.drag.utils.fileicon.DateiExistiertNichtException;
 
 import java.awt.*;
@@ -15,6 +17,7 @@ import javax.swing.*;
 
 public class ReceiveFileGUI implements FileWatcherListener{
     private static final int ICONS_PER_ROW = 4;
+    private JFrame frame;
     private String filePath;
     private JLabel statusLabel;
     private IconPanel[] iconList;
@@ -34,19 +37,8 @@ public class ReceiveFileGUI implements FileWatcherListener{
 
         java.util.List<String> filePaths = Files.getFilePathsFromDirectory(filePath);
 
-        java.util.List<GridBagConstraints> gbcList = new ArrayList<>();
+        java.util.List<GridBagConstraints> gbcList = GridBagConstraintsCreator.createGridBagConstraints(filePaths, ICONS_PER_ROW);
 
-        int helper = ((float) filePaths.size() / ICONS_PER_ROW) % 1 == 0 ? filePaths.size() / ICONS_PER_ROW : filePaths.size() / ICONS_PER_ROW + 1;
-        GridBagConstraints gbc;
-        for (int j = 0; j < helper; j++) {
-            for (int i = 0; i < ICONS_PER_ROW; i++) {
-                gbc = new GridBagConstraints();
-                gbc.gridx = i;
-                gbc.gridy = j;
-                gbc.insets = new Insets(INSET, INSET, INSET, INSET);
-                gbcList.add(gbc);
-            }
-        }
 
         iconList = new IconPanel[filePaths.size()];
         for (int i = 0; i < filePaths.size(); i++) {
@@ -104,11 +96,11 @@ public class ReceiveFileGUI implements FileWatcherListener{
                                 + 20 /*Spacing an Seite*/,
                         400));
         iconScrollPane.getVerticalScrollBar().setUnitIncrement(20);
-        return(iconScrollPane);
+        return iconScrollPane;
     }
 
     private void initFrame() {
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setLayout(new BorderLayout());
 
         statusLabel = new JLabel();
@@ -152,6 +144,7 @@ public class ReceiveFileGUI implements FileWatcherListener{
 
     @Override
     public void hasFileChanged(boolean folderChanged) {
+        if (frame != null) frame.dispose();
         initFrame();
     }
 }

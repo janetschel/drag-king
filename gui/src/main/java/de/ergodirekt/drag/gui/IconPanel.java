@@ -17,11 +17,17 @@ class IconPanel extends JPanel {
         this.filePath = filePath;
         new JPanel(new BorderLayout());
         add(new JLabel(GetIconFromFilePath.getIconFromFilePath(filePath, 70, 70)), BorderLayout.NORTH);
+
         String[] filePathParts = filePath.replace("\\", "/").split("/");
-        add(new JLabel(filePathParts[filePathParts.length-1], SwingConstants.CENTER), BorderLayout.CENTER);
+        String fileName = filePathParts[filePathParts.length-1];
+
+        JLabel iconText = new JLabel(fileName, SwingConstants.CENTER);
+        iconText.setPreferredSize(new Dimension(ICON_WIDTH,20));
+        add(iconText, BorderLayout.CENTER);
+
         setPreferredSize(new Dimension(ICON_WIDTH,100));
         setBackground(CLICKED_COLOR);
-        setToolTipText(filePath);
+        setToolTipText(fileName);
     }
 
     void switchClicked() {

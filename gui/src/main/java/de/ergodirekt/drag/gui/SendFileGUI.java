@@ -1,5 +1,8 @@
 package de.ergodirekt.drag.gui;
 
+import de.ergodirekt.drag.utils.Copy;
+import de.ergodirekt.drag.utils.DragException;
+import de.ergodirekt.drag.utils.GridBagConstraintsCreator;
 import de.ergodirekt.drag.utils.fileicon.DateiExistiertNichtException;
 
 import java.awt.*;
@@ -20,9 +23,11 @@ import javax.swing.border.CompoundBorder;
 
 public class SendFileGUI {
     private static final int ICONS_PER_ROW = 4;
+    private static final int INSET = 5;
     private JFrame frame;
     private JList<String> list;
     private List<String> selectedFiles = new ArrayList<>();
+    private String destinationFolder = System.getProperty("user.home").replace("\\", "/"); //TODO Ersetzen durch Pfad auf Zielordner
 
     public SendFileGUI() {
         frame = new JFrame();
@@ -61,19 +66,18 @@ public class SendFileGUI {
         List<String> auswahlListe = new ArrayList<>();
 
         JButton bSenden = new JButton("Senden");
+        bSenden.addActionListener(e -> sendSelectedFiles());
         JButton bAbrechen = new JButton("Abrechen");
         String[] placeholder = {"Bitte Benutzer auswählen","Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"};
         JPanel benutzerPanel = new JPanel();
         JLabel label = new JLabel();
         JComboBox<String> benutzerliste = new JComboBox<>(placeholder);
-        benutzerliste.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-                    String auswahl = (String) e.getItem();
-                    if (!auswahlListe.contains(auswahl) && !auswahl.equals("Bitte Benutzer auswählen")) {
-                        auswahlListe.add(auswahl);
-                        addUser(auswahlListe.toArray());
+        benutzerliste.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                String auswahl = (String) e.getItem();
+                if (!auswahlListe.contains(auswahl) && !auswahl.equals("Bitte Benutzer auswählen")) {
+                    auswahlListe.add(auswahl);
+                    addUser(auswahlListe.toArray());
 
                 }
             }
@@ -100,8 +104,21 @@ public class SendFileGUI {
     }
 
     private JScrollPane getMittelScrollPane() {
-        JScrollPane iconsScrollPane = getIconsScrollPane();
-        new DropTarget(iconsScrollPane, new DropTargetAdapter() {
+        JScrollPane iconScrollPane = new JScrollPane(getIconsPanel());
+        iconScrollPane.setPreferredSize(
+                new Dimension(
+                        ICONS_PER_ROW*(IconPanel.ICON_WIDTH + 2*INSET)
+                                + 40 /*Spacing an Seite*/,
+                        400));
+        iconScrollPane.getVerticalScrollBar().setUnitIncrement(20);
+
+        iconScrollPane.setBorder(
+                new CompoundBorder(
+                        BorderFactory.createEmptyBorder(10, 10, 10, 10),
+                        BorderFactory.createLineBorder(new Color(0xdd444444), 1)
+                )
+        );
+        new DropTarget(iconScrollPane, new DropTargetAdapter() {
             @Override
             public void drop(DropTargetDropEvent dtde) {
                 Transferable tr = dtde.getTransferable();
@@ -110,11 +127,8 @@ public class SendFileGUI {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY);
                     try {
                         for (Object filePath : (List)tr.getTransferData(DataFlavor.javaFileListFlavor)) {
-                            System.out.println(filePath); //TODO kopieren
                             selectedFiles.add(filePath.toString());
-                            System.out.println("Added " + filePath + " to selectedFiles");
-                            frame.add(getMittelScrollPane(), BorderLayout.CENTER);
-                            SwingUtilities.updateComponentTreeUI(frame);
+                            iconScrollPane.setViewportView(getIconsPanel());
                         }
                     } catch (UnsupportedFlavorException | IOException e) {
                         showErrorDialog(e);
@@ -126,30 +140,16 @@ public class SendFileGUI {
                 }
             }
         });
-        iconsScrollPane.getViewport().setBackground(new Color(0xffffffff));
+        iconScrollPane.getViewport().setBackground(new Color(0xffffffff));
 
-        return iconsScrollPane;
+        return iconScrollPane;
     }
 
-    private JScrollPane getIconsScrollPane() {
-        System.out.println("Neue iconsScrollPane mit " + selectedFiles.toString() + " erstellt");
-        final int INSET = 5;
+    private JPanel getIconsPanel() {
         JPanel iconsPanel = new JPanel();
         iconsPanel.setLayout(new GridBagLayout());
 
-        java.util.List<GridBagConstraints> gbcList = new ArrayList<>();
-
-        int helper = ((float) selectedFiles.size() / ICONS_PER_ROW) % 1 == 0 ? selectedFiles.size() / ICONS_PER_ROW : selectedFiles.size() / ICONS_PER_ROW + 1;
-        GridBagConstraints gbc;
-        for (int j = 0; j < helper; j++) {
-            for (int i = 0; i < ICONS_PER_ROW; i++) {
-                gbc = new GridBagConstraints();
-                gbc.gridx = i;
-                gbc.gridy = j;
-                gbc.insets = new Insets(INSET, INSET, INSET, INSET);
-                gbcList.add(gbc);
-            }
-        }
+        java.util.List<GridBagConstraints> gbcList = GridBagConstraintsCreator.createGridBagConstraints(selectedFiles, ICONS_PER_ROW);
 
         IconPanel[] iconList = new IconPanel[selectedFiles.size()];
         for (int i = 0; i < selectedFiles.size(); i++) {
@@ -162,22 +162,7 @@ public class SendFileGUI {
             }
         }
 
-        JScrollPane iconScrollPane = new JScrollPane(iconsPanel);
-        iconScrollPane.setPreferredSize(
-                new Dimension(
-                        ICONS_PER_ROW*(IconPanel.ICON_WIDTH + 2*INSET)
-                                + 30 /*Spacing an Seite*/,
-                        400));
-        iconScrollPane.getVerticalScrollBar().setUnitIncrement(20);
-
-        iconScrollPane.setBorder(
-                new CompoundBorder(
-                        BorderFactory.createEmptyBorder(10, 10, 10, 10),
-                        BorderFactory.createLineBorder(new Color(0xdd444444), 1)
-                )
-        );
-
-        return(iconScrollPane);
+        return iconsPanel;
     }
 
     private JMenuBar getMenue() {
@@ -212,6 +197,18 @@ public class SendFileGUI {
 
     private void uber() {
         new UeberUnsGUI(frame);
+    }
+
+    private void sendSelectedFiles() {
+        for (String file : selectedFiles) {
+            String[] splitPath = file.replace("\\", "/").split("/");
+            String fileName = splitPath[splitPath.length-1];
+            try {
+                Copy.copy(file, destinationFolder + "/" + fileName);
+            } catch (DragException e) {
+                showErrorDialog(e);
+            }
+        }
     }
 
     private void showErrorDialog(Throwable t) {
