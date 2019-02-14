@@ -5,9 +5,11 @@ import java.io.File;
 public class DirCreater {
 
     private static String path ="T:\\Friedrich\\Projekt\\properties";
+    private static String name;
 
-    public DirCreater(String path) {
-        String newname = System.getProperty("user.name");
+
+    public static void createDir(String path , String newname ) {
+
 
         String newpath = path + "\\" + newname;
         File dir = new File(newpath);
@@ -26,6 +28,6 @@ public class DirCreater {
         }
     }
     public static void main(String[] args){
-            DirCreater d = new DirCreater(path);
+            DirCreater.createDir("C:\\Users\\Administrator\\Documents","Ali");
     }
 }
