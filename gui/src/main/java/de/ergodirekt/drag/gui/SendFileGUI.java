@@ -27,7 +27,7 @@ public class SendFileGUI {
     private JFrame frame;
     private JList<String> list;
     private List<String> droppedFiles = new ArrayList<>();
-    private String destinationFolder = System.getProperty("user.home").replace("\\", "/"); //TODO Ersetzen durch Pfad auf Zielordner
+    private String destinationFolder = System.getProperty("user.home").replace("\\", "/") + "/Ordner"; //TODO Ersetzen durch Pfad auf Zielordner
     private JScrollPane iconScrollPane;
 
     public SendFileGUI() {
@@ -106,7 +106,7 @@ public class SendFileGUI {
     }
 
     private JScrollPane getMittelScrollPane() {
-        iconScrollPane = new JScrollPane();
+        iconScrollPane = new JScrollPane(getIconsPanel());
         iconScrollPane.setPreferredSize(
                 new Dimension(
                         ICONS_PER_ROW*(IconPanel.ICON_WIDTH + 2*INSET)
@@ -164,6 +164,8 @@ public class SendFileGUI {
             }
         }
 
+        iconsPanel.setBackground(new Color(0xffffffff));
+
         return iconsPanel;
     }
 
@@ -214,8 +216,8 @@ public class SendFileGUI {
     }
 
     private void clearInputs() {
-        iconScrollPane.setViewportView(null);
         droppedFiles = new ArrayList<>();
+        iconScrollPane.setViewportView(getIconsPanel());
     }
 
     private void showErrorDialog(Throwable t) {

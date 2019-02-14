@@ -74,4 +74,15 @@ public class Datei {
 
         return listOfFilePaths;
     }
+
+    public static void deleteAllFilesFromDirectory(String folderPath) {
+        File folder = new File(folderPath);
+        File[] listOfFiles = folder.listFiles();
+
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                file.delete();
+            }
+        }
+    }
 }
