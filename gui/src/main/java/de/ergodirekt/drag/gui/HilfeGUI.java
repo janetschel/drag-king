@@ -2,6 +2,8 @@ package de.ergodirekt.drag.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 
 public class HilfeGUI extends StandartDialogGUI {
@@ -17,19 +19,28 @@ public class HilfeGUI extends StandartDialogGUI {
     private JPanel hauptPanel() {
 
         JPanel hilfePanel=new JPanel();
-        JLabel text= new JLabel("Für Fragen und Hilfe bitte senden ein E-mail an :       ");
+        JLabel text= new JLabel("<html><center><span style=\"color:blue\"><br><h3>Für Fragen und Hilfe bitte kontaktiren mit uns  :</h3></span>" +
+                "<h2><a href = \"mailto:jan.etschel@ergodirekt.de\">jan.etschel@ergodirekt.de</a><h2></br>" +
+                "</center></html>");
         hilfePanel.add(text);
-        JLabel email= new JLabel("jan.etschel@ergodirekt.de");
-        email.setForeground(Color.BLUE);
-        hilfePanel.add(email);
 
         return hilfePanel;
     }
+
 
     @Override
     protected void initKomponenten() {
         getContentPane().setLayout(new BorderLayout());
 
         add(hauptPanel(), BorderLayout.CENTER);
+        Action closeAction = new AbstractAction(){
+            public void actionPerformed(ActionEvent e){
+                dispose();
+            }
+        };
+
+        KeyStroke esc = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0);
+        getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(esc, "closex");
+        getRootPane().getActionMap().put("closex", closeAction);
     }
 }

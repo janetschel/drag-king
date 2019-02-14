@@ -20,7 +20,7 @@ public abstract class StandartDialogGUI extends JDialog {
         getContentPane().setLayout(new GridBagLayout());
         setTitle(fensterName);
         setModal(true);
-        setSize(400, 300);
+        setSize(425, 270);
 
     }
 }
