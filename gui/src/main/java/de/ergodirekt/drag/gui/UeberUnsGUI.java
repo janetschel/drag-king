@@ -18,11 +18,11 @@ public class UeberUnsGUI extends StandartDialogGUI {
     private JPanel hauptPanel() {
 
         JPanel ueber=new JPanel();
-        JLabel programmV= new JLabel("<html><center><span style=\"color:blue\"><br><h1>Programm Version 1.0.0.1 </h1></br></span>" +
-                "<br><h3><span style=\"color:red\"> wir Sind Azubis von Die Erstelehrjahr</span></h3></br>" +
-                "<br><h2>Jan Etschel, Manuel Wälztein</br>" +
+        JLabel programmV= new JLabel("<html><center><span style=\"color:blue\"><h2>Programm Version 1.0.0.1 </h2></span>" +
+                "<h4> wir Sind Azubis von Die Erste lehrjahr</span></h4>" +
+                "<h3>Jan Etschel, Manuel Wälztein" +
                 "<br>Mohammad Ali Elbokaie, Habib Akroush</br>" +
-                "<br> Obada Al Refai</h2></br>" +
+                "<br> Obada Al Refai</h3></br>" +
                 "</center></html>");
 
 
