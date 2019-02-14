@@ -16,7 +16,6 @@ import javax.swing.*;
 public class ReceiveFileGUI implements FileWatcherListener{
     private static final int ICONS_PER_ROW = 4;
     private String filePath;
-    private JFrame frame;
     private JLabel statusLabel;
     private IconPanel[] iconList;
     private JPanel iconPanel;
@@ -107,7 +106,7 @@ public class ReceiveFileGUI implements FileWatcherListener{
     }
 
     private void initFrame() {
-        frame = new JFrame();
+        JFrame frame = new JFrame();
         frame.setLayout(new BorderLayout());
 
         statusLabel = new JLabel();
