@@ -25,9 +25,6 @@ public class ReceiveFileGUI implements FileWatcherListener{
 
     public ReceiveFileGUI(String filePath) {
         this.filePath = filePath;
-        frame = new JFrame();
-        frame.setLayout(new BorderLayout());
-        statusLabel = new JLabel();
         new FileWatcher(filePath, this);
     }
 
@@ -110,6 +107,11 @@ public class ReceiveFileGUI implements FileWatcherListener{
     }
 
     private void initFrame() {
+        frame = new JFrame();
+        frame.setLayout(new BorderLayout());
+
+        statusLabel = new JLabel();
+
         frame.add(getCenter(filePath), BorderLayout.CENTER);
         frame.add(statusLabel, BorderLayout.SOUTH);
 
