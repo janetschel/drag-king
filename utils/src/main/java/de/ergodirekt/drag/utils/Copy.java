@@ -8,17 +8,15 @@ import java.io.InputStream;
 
 
 public class Copy {
+    public static void copy(String srcPath, String destPath) throws DragException {
+        File srcFolderFile = new File(srcPath);
+        File destFolderFile = new File(destPath);
 
-    public static void main(String[] args) throws DragException {
-        File srcFolder = new File("C:\\Users\\Administrator\\Desktop\\hello");
-        File destFolder = new File("C:\\Users\\Administrator\\Documents\\newHello");
-
-        if (!srcFolder.exists()) {
+        if (!srcFolderFile.exists()) {
                 throw new DragException("Directory does not exist.");
-
         } else {
             try {
-                copyFolder(srcFolder, destFolder);
+                copyFolder(srcFolderFile, destFolderFile);
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Good bye2 ");
@@ -28,7 +26,7 @@ public class Copy {
         System.out.println("Cool 1 ");
     }
 
-    public static void copyFolder(File src, File dest) throws IOException {
+    private static void copyFolder(File src, File dest) throws IOException {
         if (src.isDirectory()) {
             if (!dest.exists()) {
                 dest.mkdir();
