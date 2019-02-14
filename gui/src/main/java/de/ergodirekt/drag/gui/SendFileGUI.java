@@ -24,7 +24,7 @@ public class SendFileGUI {
     public SendFileGUI() {
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);
+        frame.setSize(600, 500);
         frame.setMinimumSize(new Dimension(230, 200));
         frame.setTitle("Drag King");
         frame.setLocationRelativeTo(null);
@@ -97,8 +97,6 @@ public class SendFileGUI {
         list.setListData(s);
     }
 
-
-
     private Component getMittelPanel() {
         JScrollPane mittelScrollPane = new JScrollPane();
         mittelScrollPane.setLayout(new ScrollPaneLayout());
@@ -133,42 +131,15 @@ public class SendFileGUI {
         return mittelScrollPane;
     }
 
-
-
     private JMenuBar getMenue() {
         JMenuBar bar = new JMenuBar();
 
 
-        JMenu einstellungen = new JMenu("Einstellungen");
-        bar.add(einstellungen);
-        JMenuItem eignschaften = new JMenuItem("Eigenschaften");
-        JMenu gruppen = new JMenu("Gruppenverwaltung");
-        JMenuItem neu = new JMenuItem("Neu");
-        JMenuItem loschen = new JMenuItem("Löschen");
-        JMenuItem bearbeiten = new JMenuItem("Bearbeiten");
-
-     /*   submenu = new JMenu("A submenu");
-        submenu.setMnemonic(KeyEvent.VK_S);
-
-        menuItem = new JMenuItem("An item in the submenu");
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_2, ActionEvent.ALT_MASK));
-        submenu.add(menuItem);*/
-
-
-
-        einstellungen.add(eignschaften);
-        einstellungen.addSeparator();
-        einstellungen.add(gruppen);
-        gruppen.add(neu);
-        gruppen.add(bearbeiten);
-        gruppen.add(loschen);
-
-
-        eignschaften.addActionListener(e -> eignschaften());
-        neu.addActionListener(e -> neu());
-        bearbeiten.addActionListener(e -> bearbeiten());
-        loschen.addActionListener(e -> loschen());
+        JMenu beenden = new JMenu("Beenden");
+        bar.add(beenden);
+        JMenuItem exit = new JMenuItem("Exit");
+        beenden.add(exit);
+        exit.addActionListener(e -> System.exit(0));
 
         JMenu info = new JMenu("Info");
         bar.add(info);
@@ -176,8 +147,6 @@ public class SendFileGUI {
         JMenuItem uber = new JMenuItem("Über");
         info.add(hilfe);
         info.add(uber);
-
-
         hilfe.addActionListener(e -> hilfe());
         uber.addActionListener(e -> uber());
         return bar;
@@ -191,24 +160,4 @@ public class SendFileGUI {
         new UeberUnsGUI(frame);
 
     }
-
-
-    private void neu() {
-        new GruppenNeuGUI(frame);
-
-    }
-    private void loschen() {
-        new GruppenLoeschenGUI(frame);
-
-    }
-    private void bearbeiten() {
-        new GruppenBearbeitenGUI(frame);
-
-    }
-
-    private void eignschaften() {
-        new EigenschaftenGUI(frame);
-    }
-
-
     }
