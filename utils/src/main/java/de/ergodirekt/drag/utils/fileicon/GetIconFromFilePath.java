@@ -53,6 +53,6 @@ public abstract class GetIconFromFilePath {
 
     private static File getStandardFile() {
         URL url = GetIconFromFilePath.class.getClassLoader().getResource("icons/folder.png");
-        return standardFile == null ? (url == null ? null : new File(url.toString().split("^file:/")[FILEPATH]) ) : standardFile;
+        return standardFile == null ? (url == null ? null : new File(url.toString().split("^file:")[FILEPATH]) ) : standardFile;
     }
 }
