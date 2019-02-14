@@ -56,6 +56,7 @@ public class SendFileGUI {
         //list.setVisibleRowCount(-1);
         JScrollPane listScroller = new JScrollPane(list);
         listScroller.setPreferredSize(new Dimension(250, 80));
+        addBorder(listScroller);
 
         return listScroller;
     }
@@ -114,12 +115,7 @@ public class SendFileGUI {
                         400));
         iconScrollPane.getVerticalScrollBar().setUnitIncrement(20);
 
-        iconScrollPane.setBorder(
-                new CompoundBorder(
-                        BorderFactory.createEmptyBorder(10, 10, 10, 10),
-                        BorderFactory.createLineBorder(new Color(0xdd444444), 1)
-                )
-        );
+        addBorder(iconScrollPane);
         new DropTarget(iconScrollPane, new DropTargetAdapter() {
             @Override
             public void drop(DropTargetDropEvent dtde) {
@@ -212,6 +208,15 @@ public class SendFileGUI {
                 showErrorDialog(e);
             }
         }
+    }
+
+    private void addBorder (JComponent component) {
+        component.setBorder(
+                new CompoundBorder(
+                        BorderFactory.createEmptyBorder(10, 10, 10, 10),
+                        BorderFactory.createLineBorder(new Color(0xdd444444), 1)
+                )
+        );
     }
 
     private void clearInputs() {

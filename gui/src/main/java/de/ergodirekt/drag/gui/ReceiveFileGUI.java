@@ -109,10 +109,10 @@ public class ReceiveFileGUI implements FileWatcherListener{
             @Override
             public void windowClosing(WindowEvent event) {
                 int selectedOption = JOptionPane.showConfirmDialog(frame, "Möchten Sie die empfangenen Dateien von ihrem Transferlaufwerk löschen?", "Dateien löschen?", JOptionPane.YES_NO_CANCEL_OPTION);
-                if (selectedOption == 0) {
+                if (selectedOption == JOptionPane.YES_OPTION) {
                     Datei.deleteAllFilesFromDirectory(folderPath);
                     frame.dispose();
-                } else if (selectedOption == 1) {
+                } else if (selectedOption == JOptionPane.NO_OPTION) {
                     frame.dispose();
                 }
             }
