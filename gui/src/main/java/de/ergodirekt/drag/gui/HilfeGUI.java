@@ -17,11 +17,10 @@ public class HilfeGUI extends StandartDialogGUI {
     private JPanel hauptPanel() {
 
         JPanel hilfePanel=new JPanel();
-        JLabel text= new JLabel("Für Fragen und Hilfe bitte senden ein E-mail an :       ");
+        JLabel text= new JLabel("<html><center><span style=\"color:blue\"><br><h3>Für Fragen und Hilfe bitte kontaktiren mit uns  :</h3></span>" +
+                "<h2><a href = \"mailto:jan.etschel@ergodirekt.de\">jan.etschel@ergodirekt.de</a><h2></br>" +
+                "</center></html>");
         hilfePanel.add(text);
-        JLabel email= new JLabel("jan.etschel@ergodirekt.de");
-        email.setForeground(Color.BLUE);
-        hilfePanel.add(email);
 
         return hilfePanel;
     }
