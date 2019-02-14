@@ -21,21 +21,21 @@ public class ReceiveFileGUI {
     private boolean isMousePressed = false;
     private StringBuilder errorMessage = new StringBuilder();
 
-    public ReceiveFileGUI() {
+    public ReceiveFileGUI(String filePath) {
         frame = new JFrame();
         frame.setLayout(new BorderLayout());
         statusLabel = new JLabel();
-        frame.add(getCenter(), BorderLayout.CENTER);
+        frame.add(getCenter(filePath), BorderLayout.CENTER);
         frame.add(statusLabel, BorderLayout.SOUTH);
         initFrame();
     }
 
-    private JScrollPane getCenter() {
+    private JScrollPane getCenter(String filePath) {
         final int INSET = 5;
         iconPanel = new JPanel();
         iconPanel.setLayout(new GridBagLayout());
 
-        java.util.List<String> filePaths = Files.getFilePathsFromDirectory("C:/Users/Administrator/Desktop"); //TODO Pfad auf Laufwerk
+        java.util.List<String> filePaths = Files.getFilePathsFromDirectory(filePath);
 
         iconList = new IconPanel[filePaths.size()];
         for (int i = 0; i < filePaths.size(); i++) {
@@ -143,9 +143,5 @@ public class ReceiveFileGUI {
 
     public void setMousePressed(boolean mousePressed) {
         isMousePressed = mousePressed;
-    }
-
-    public static void main(String[] args) {
-        new ReceiveFileGUI();
     }
 }
