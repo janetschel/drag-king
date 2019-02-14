@@ -1,11 +1,7 @@
 package de.ergodirekt.drag.gui;
 
-import com.sun.javafx.logging.JFRInputEvent;
 import de.ergodirekt.drag.logic.ListTransferHandler;
-import de.ergodirekt.drag.utils.FileWatcher;
-import de.ergodirekt.drag.utils.FileWatcherListener;
-import de.ergodirekt.drag.utils.Files;
-import de.ergodirekt.drag.utils.GridBagConstraintsCreator;
+import de.ergodirekt.drag.utils.*;
 import de.ergodirekt.drag.utils.fileicon.DateiExistiertNichtException;
 
 import java.awt.*;
@@ -35,7 +31,7 @@ public class ReceiveFileGUI implements FileWatcherListener{
         iconsPanel = new JPanel();
         iconsPanel.setLayout(new GridBagLayout());
 
-        java.util.List<String> filePaths = Files.getFilePathsFromDirectory(filePath);
+        java.util.List<String> filePaths = Datei.getFilePathsFromDirectory(filePath);
 
         java.util.List<GridBagConstraints> gbcList = GridBagConstraintsCreator.createGridBagConstraints(filePaths, ICONS_PER_ROW);
 
