@@ -26,7 +26,7 @@ public class SendFileGUI {
 
     public SendFileGUI() {
         frame = new JFrame();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setSize(600, 500);
         frame.setMinimumSize(new Dimension(230, 200));
         frame.setTitle("Drag King");
@@ -119,12 +119,13 @@ public class SendFileGUI {
                 if (tr.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY);
                     try {
-                        for (Object filePath : (List)dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor)) {
-                            Copy.copyFolder(new File(filePath.toString()), new File("C:/Users/Administrator/Desktop/Ordner"));
+                        for (Object filePath : (List)tr.getTransferData(DataFlavor.javaFileListFlavor)) {
+                            System.out.println(filePath); //TODO kopieren
                         }
                     } catch (UnsupportedFlavorException | IOException e) {
-                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(frame, e.getMessage(), "Fehler beim Drop", JOptionPane.ERROR_MESSAGE);
                     }
+
                     dtde.getDropTargetContext().dropComplete(true);
                 } else {
                     dtde.rejectDrop();
