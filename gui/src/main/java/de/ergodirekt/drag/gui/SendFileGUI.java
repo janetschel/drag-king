@@ -134,9 +134,6 @@ public class SendFileGUI {
     }
 
 
-    public static void main(String[] args) {
-        new SendFileGUI();
-    }
 
     private JMenuBar getMenue() {
         JMenuBar bar = new JMenuBar();
