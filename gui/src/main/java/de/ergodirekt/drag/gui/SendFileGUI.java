@@ -62,7 +62,7 @@ public class SendFileGUI {
 
         JButton bSenden = new JButton("Senden");
         JButton bAbrechen = new JButton("Abrechen");
-        String[] placeholder = {"","Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"};
+        String[] placeholder = {"Bitte Benutzer auswählen","Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"};
         JPanel benutzerPanel = new JPanel();
         JLabel label = new JLabel();
         JComboBox<String> benutzerliste = new JComboBox<>(placeholder);
@@ -71,7 +71,7 @@ public class SendFileGUI {
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     String auswahl = (String) e.getItem();
-                    if (!auswahlListe.contains(auswahl)) {
+                    if (!auswahlListe.contains(auswahl) && !auswahl.equals("Bitte Benutzer auswählen")) {
                         auswahlListe.add(auswahl);
                         addUser(auswahlListe.toArray());
 
