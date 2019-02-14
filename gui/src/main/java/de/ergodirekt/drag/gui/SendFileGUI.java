@@ -144,7 +144,7 @@ public class SendFileGUI {
         bar.add(beenden);
         JMenuItem exit = new JMenuItem("Exit");
         beenden.add(exit);
-        exit.addActionListener(e -> System.exit(0));
+        exit.addActionListener(e ->exit());
 
         JMenu info = new JMenu("Info");
         bar.add(info);
@@ -155,6 +155,10 @@ public class SendFileGUI {
         hilfe.addActionListener(e -> hilfe());
         uber.addActionListener(e -> uber());
         return bar;
+    }
+
+    private void exit() {
+        System.exit(0);
     }
 
     private void hilfe() {
