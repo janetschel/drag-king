@@ -1,6 +1,8 @@
 package de.ergodirekt.drag.gui;
 
 import de.ergodirekt.drag.logic.ListTransferHandler;
+import de.ergodirekt.drag.utils.FileWatcher;
+import de.ergodirekt.drag.utils.FileWatcherListener;
 import de.ergodirekt.drag.utils.Files;
 import de.ergodirekt.drag.utils.fileicon.DateiExistiertNichtException;
 
@@ -11,9 +13,9 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import javax.swing.*;
 
-
-public class ReceiveFileGUI {
+public class ReceiveFileGUI implements FileWatcherListener{
     private static final int ICONS_PER_ROW = 4;
+    private String filePath;
     private JFrame frame;
     private JLabel statusLabel;
     private IconPanel[] iconList;
@@ -22,12 +24,11 @@ public class ReceiveFileGUI {
     private StringBuilder errorMessage = new StringBuilder();
 
     public ReceiveFileGUI(String filePath) {
+        this.filePath = filePath;
         frame = new JFrame();
         frame.setLayout(new BorderLayout());
         statusLabel = new JLabel();
-        frame.add(getCenter(filePath), BorderLayout.CENTER);
-        frame.add(statusLabel, BorderLayout.SOUTH);
-        initFrame();
+        new FileWatcher(filePath, this);
     }
 
     private JScrollPane getCenter(String filePath) {
@@ -74,7 +75,6 @@ public class ReceiveFileGUI {
                 errorMessage.append(errorMessage.toString().equals("") ? ListTransferHandler.ERROR_MESSAGE : "");
                 errorMessage.append(filePaths.get(i)).append("<br/>");
             }
-
         }
 
         if (!errorMessage.toString().equals("")) {
@@ -140,5 +140,12 @@ public class ReceiveFileGUI {
 
     public void setMousePressed(boolean mousePressed) {
         isMousePressed = mousePressed;
+    }
+
+    @Override
+    public void hasFileChanged(boolean folderChanged) {
+        frame.add(getCenter(filePath), BorderLayout.CENTER);
+        frame.add(statusLabel, BorderLayout.SOUTH);
+        initFrame();
     }
 }
