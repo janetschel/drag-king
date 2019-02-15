@@ -20,6 +20,7 @@ public class AutoCompleteUsernames implements Runnable {
 
     public AutoCompleteUsernames(String[] usernames) {
         this.usernames = usernames;
+        input = new JTextField(30);
     }
 
     /**
@@ -29,9 +30,6 @@ public class AutoCompleteUsernames implements Runnable {
         System.out.println(Arrays.toString(usernames));
         // Create the completion service.
         NameService nameService = new NameService(usernames);
-
-        // Create the input field.
-        input = new JTextField(30);
 
         // Create the auto completing document model with a reference to the
         // service and the input field.

@@ -1,5 +1,6 @@
 package de.ergodirekt.drag.utils;
 
+import javax.swing.*;
 
 import java.io.*;
 import java.nio.charset.Charset;
