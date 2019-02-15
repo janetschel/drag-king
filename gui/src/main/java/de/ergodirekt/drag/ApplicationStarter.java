@@ -9,10 +9,10 @@ import de.ergodirekt.drag.utils.DragProperties;
 public class ApplicationStarter {
     public static void main(String[] args) {
         DragProperties properties = new DragProperties();
-        if (properties.getProperty("registeredUser") == null) {
+        if (properties.getProperty("loggedInUser") == null) {
             new RegistrationGUI(properties);
         }
-        while (properties.getProperty("registeredUser") == null) {
+        while (properties.getProperty("loggedInUser") == null) {
             try {
                 Thread.sleep(400);
             } catch (InterruptedException e) {

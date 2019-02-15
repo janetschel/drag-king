@@ -19,7 +19,7 @@ public class RegistrationGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 properties.addToProperties("transferFolder", (properties.getProperties().getProperty("destinationFolder")) + "\\" + username.getText());
-                properties.addToProperties("registeredUser", username.getText());
+                properties.addToProperties("loggedInUser", username.getText());
                 Path transferFolderPath = Paths.get(properties.getProperty("transferFolder"));
                 transferFolderPath.toFile().mkdirs();
                 frame.dispose();

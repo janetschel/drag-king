@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
@@ -14,24 +15,26 @@ public class DragProperties {
     private static Properties properties = new Properties();
 
     public DragProperties() {
-        Path pathToPropDir = Paths.get(System.getProperty("user.home") + "\\drag-home");
-        pathToPropDir.toFile().mkdirs();
         pathToProperties = Paths.get(System.getProperty("user.home") + "\\drag-home" + "\\drag.properties");
         Path p = Paths.get("T:/Friedrich/DO NOT TOUCH THIS!");
-        addToProperties("destinationFolder", p.toString());
+        properties.setProperty("destinationFolder", p.toString());
+        properties = getProperties();
     }
 
     public Properties getProperties() {
         try (BufferedReader rdr = Files.newBufferedReader(pathToProperties)) {
             properties.load(rdr);
+        } catch (NoSuchFileException nsfe) {
+            Path pathToPropDir = Paths.get(System.getProperty("user.home") + "\\drag-home");
+            pathToPropDir.toFile().mkdirs();
         } catch (IOException e1) {
             // TODO Errorhandling
-            e1.printStackTrace();
         }
         return properties;
     }
 
     public void addToProperties(String propertyName, String propertyValue) {
+        System.out.println("Addded " + propertyName + " to properties");
         try (BufferedWriter w = Files.newBufferedWriter(pathToProperties, Charset.defaultCharset())) {
             if (properties.getProperty(propertyName) == null) {
                 properties.setProperty(propertyName, propertyValue);
