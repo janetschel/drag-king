@@ -30,7 +30,6 @@ public class AutoCompleteUsernames implements Runnable {
         System.out.println(Arrays.toString(usernames));
         // Create the completion service.
         NameService nameService = new NameService(usernames);
-
         // Create the auto completing document model with a reference to the
         // service and the input field.
         Document autoCompleteDocument = new AutoCompleteDocument(nameService,

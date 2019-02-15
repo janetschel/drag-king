@@ -1,6 +1,7 @@
 package de.ergodirekt.drag.gui;
 
 import de.ergodirekt.drag.autocomplete.AutoCompleteUsernames;
+
 import de.ergodirekt.drag.utils.Datei;
 import de.ergodirekt.drag.utils.DragException;
 import de.ergodirekt.drag.utils.GridBagConstraintsCreator;
@@ -112,6 +113,7 @@ public class SendFileGUI {
                         userExists = true;
                     }
                 }
+
                 if (!userSeleceted && userExists) model.addElement(finalUserTextField.getText());
                 finalUserTextField.setText("");
             }
