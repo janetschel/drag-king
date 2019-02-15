@@ -22,6 +22,7 @@ public class HilfeGUI extends StandartDialogGUI {
         JLabel text= new JLabel("<html><center><span style=\"color:blue\"><br><h3>Für Fragen und Hilfe bitte kontaktiren mit uns  :</h3></span>" +
                 "<h2><a href = \"mailto:jan.etschel@ergodirekt.de\">jan.etschel@ergodirekt.de</a><h2></br>" +
                 "</center></html>");
+        text.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/images/email.png")).getImage().getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
         hilfePanel.add(text);
 
         return hilfePanel;

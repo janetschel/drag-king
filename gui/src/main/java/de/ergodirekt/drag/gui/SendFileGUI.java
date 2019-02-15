@@ -5,6 +5,8 @@ import de.ergodirekt.drag.utils.DragException;
 import de.ergodirekt.drag.utils.GridBagConstraintsCreator;
 import de.ergodirekt.drag.utils.fileicon.DateiExistiertNichtException;
 
+import javax.swing.*;
+import javax.swing.border.CompoundBorder;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -17,9 +19,6 @@ import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.*;
-import javax.swing.border.CompoundBorder;
 
 public class SendFileGUI {
     private static final int ICONS_PER_ROW = 4;
@@ -39,6 +38,7 @@ public class SendFileGUI {
 
         frame.setLayout(new BorderLayout());
         frame.setJMenuBar(getMenue());
+
 
         frame.add(getMittelScrollPane(), BorderLayout.CENTER);
         frame.add(getSuedPanel(), BorderLayout.SOUTH);
@@ -68,13 +68,17 @@ public class SendFileGUI {
         List<String> auswahlListe = new ArrayList<>();
 
         JButton bSenden = new JButton("Senden");
+        bSenden.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/images/send.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
         bSenden.addActionListener(e -> sendSelectedFiles());
         JButton bLoeschen = new JButton("Löschen");
+        bLoeschen.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/images/del.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
         bLoeschen.addActionListener(e -> clearInputs());
         String[] placeholder = {"Bitte Benutzer auswählen","Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"};
         JPanel benutzerPanel = new JPanel();
         JLabel label = new JLabel();
         JComboBox<String> benutzerliste = new JComboBox<>(placeholder);
+
+
         benutzerliste.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 String auswahl = (String) e.getItem();
@@ -93,6 +97,8 @@ public class SendFileGUI {
         buttonPanel.add(bSenden);
         panel.add(buttonPanel, BorderLayout.EAST);
         panel.add(benutzerPanel, BorderLayout.WEST);
+        label.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/user.png")).getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH)));
+
         panel.setBorder(BorderFactory.createLineBorder(frame.getContentPane().getBackground(), 10));
 
         return panel;
@@ -169,14 +175,18 @@ public class SendFileGUI {
 
 
         JMenu beenden = new JMenu("Beenden");
+
         bar.add(beenden);
         JMenuItem exit = new JMenuItem("Exit");
+        exit.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/images/exit.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
         beenden.add(exit);
         exit.addActionListener(e ->exit());
 
         JMenu info = new JMenu("Info");
+        info.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/images/info.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
         bar.add(info);
         JMenuItem hilfe = new JMenuItem("Hilfe");
+        hilfe.setIcon(new ImageIcon(new ImageIcon(getClass().getResource("/images/help.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
         JMenuItem uber = new JMenuItem("Über");
         info.add(hilfe);
         info.add(uber);
