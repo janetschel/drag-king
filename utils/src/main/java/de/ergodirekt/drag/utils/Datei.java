@@ -1,6 +1,6 @@
 package de.ergodirekt.drag.utils;
 
-
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -22,10 +22,7 @@ public class Datei {
     }
 
     public void schreibe(String txt, boolean append) {
-
-
-        File file = new File(dateiName);
-        File datei = null;
+        File datei;
         datei = new File(dateiName);
         try (FileWriter outStream = new FileWriter(datei, append)){
 
@@ -39,8 +36,8 @@ public class Datei {
 
     public String lese() {
         StringBuffer inhalt = new StringBuffer();
-        File datei = null;
-        BufferedReader reader = null;
+        File datei;
+        BufferedReader reader;
         // einlesen der Datei
         datei = new File(dateiName); // Erzeuge ein Datei-Objekt
         try (FileReader inStream = new FileReader(datei)) {
@@ -61,7 +58,7 @@ public class Datei {
         return inhalt.toString();
     }
 
-    public static List<String> getFilePathsFromDirectory(String folderPath) {
+    public static String[] getFilePathsFromDirectory(String folderPath) {
         File folder = new File(folderPath);
         File[] listOfFiles = folder.listFiles();
         List<String> listOfFilePaths = new ArrayList<>();
@@ -72,7 +69,12 @@ public class Datei {
             }
         }
 
-        return listOfFilePaths;
+        return listOfFilePaths.toArray(new String[0]);
+    }
+
+    public static String getFileNameFromPath(String filePath) {
+        String[] filePathParts = filePath.replace("\\", "/").split("/");
+        return filePathParts[filePathParts.length-1];
     }
 
     public static void deleteAllFilesFromDirectory(String folderPath) {
@@ -82,6 +84,16 @@ public class Datei {
         if (listOfFiles != null) {
             for (File file : listOfFiles) {
                 file.delete();
+            }
+        }
+    }
+
+    public static void sendFiles(JList jList, String[] filesToSend, String destinationPath) throws DragException {
+        for (int i = 0; i < jList.getModel().getSize(); i++) {
+            for (String file : filesToSend) {
+                String[] splitPath = file.replace("\\", "/").split("/");
+                String fileName = splitPath[splitPath.length - 1];
+                Copy.copy(file, destinationPath + "/" + jList.getModel().getElementAt(i) + "/" + fileName);
             }
         }
     }

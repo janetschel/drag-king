@@ -1,6 +1,7 @@
 package de.ergodirekt.drag.gui;
 
-import de.ergodirekt.drag.utils.Copy;
+import de.ergodirekt.drag.autocomplete.AutoCompleteUsernames;
+import de.ergodirekt.drag.utils.Datei;
 import de.ergodirekt.drag.utils.DragException;
 import de.ergodirekt.drag.utils.GridBagConstraintsCreator;
 import de.ergodirekt.drag.utils.fileicon.DateiExistiertNichtException;
@@ -13,7 +14,7 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.event.ItemEvent;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +25,22 @@ import javax.swing.border.CompoundBorder;
 public class SendFileGUI {
     private static final int ICONS_PER_ROW = 4;
     private static final int INSET = 5;
+    private final String[] usernames;
     private JFrame frame;
-    private JList<String> list;
-    private List<String> droppedFiles = new ArrayList<>();
-    private String destinationFolder = System.getProperty("user.home").replace("\\", "/") + "/Ordner"; //TODO Ersetzen durch Pfad auf Zielordner
+    private List<String> selectedFiles = new ArrayList<>();
+    private String destinationFolder = "T:/Friedrich/DO NOT TOUCH THIS!";
     private JScrollPane iconScrollPane;
+    private DefaultListModel<String> model;
+    private JList<String> selectedUsersList;
 
     public SendFileGUI() {
+        String[] filePaths = Datei.getFilePathsFromDirectory(destinationFolder);
+        usernames = new String[filePaths.length];
+        for (int i = 0; i < filePaths.length; i++) {
+            usernames[i] = Datei.getFileNameFromPath(filePaths[i]);
+        }
+        AutoCompleteUsernames autoCompleteUsernames = new AutoCompleteUsernames(usernames);
+        SwingUtilities.invokeLater(autoCompleteUsernames);
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         //frame.setSize(600, 500);
@@ -41,20 +51,19 @@ public class SendFileGUI {
         frame.setJMenuBar(getMenue());
 
         frame.add(getMittelScrollPane(), BorderLayout.CENTER);
-        frame.add(getSuedPanel(), BorderLayout.SOUTH);
-        frame.add(getNordlPanel(), BorderLayout.WEST);
+        frame.add(getSuedPanel(autoCompleteUsernames), BorderLayout.SOUTH);
+        frame.add(getNordPanel(), BorderLayout.WEST);
 
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    private Component getNordlPanel() {
-        list = new JList(); //data has type Object[]
-        list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        //list.setVisibleRowCount(-1);
-        JScrollPane listScroller = new JScrollPane(list);
+    private Component getNordPanel() {
+        model = new DefaultListModel<>();
+        selectedUsersList = new JList<>(model);
+        selectedUsersList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        JScrollPane listScroller = new JScrollPane(selectedUsersList);
         listScroller.setPreferredSize(new Dimension(250, 80));
         addBorder(listScroller);
 
@@ -62,48 +71,62 @@ public class SendFileGUI {
     }
 
 
-    private Component getSuedPanel() {
+    private Component getSuedPanel(AutoCompleteUsernames autoCompleteUsernames) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        List<String> auswahlListe = new ArrayList<>();
 
         JButton bSenden = new JButton("Senden");
-        bSenden.addActionListener(e -> sendSelectedFiles());
+        bSenden.addActionListener(e -> {
+            try {
+                Datei.sendFiles(selectedUsersList, selectedFiles.toArray(new String[0]), destinationFolder);
+            } catch (DragException de) {
+                showErrorDialog(de, "Datei konnte nicht geschickt werden");
+            }
+        });
         JButton bLoeschen = new JButton("Löschen");
         bLoeschen.addActionListener(e -> clearInputs());
-        String[] placeholder = {"Bitte Benutzer auswählen","Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"};
         JPanel benutzerPanel = new JPanel();
         JLabel label = new JLabel();
-        JComboBox<String> benutzerliste = new JComboBox<>(placeholder);
-        benutzerliste.addItemListener(e -> {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                String auswahl = (String) e.getItem();
-                if (!auswahlListe.contains(auswahl) && !auswahl.equals("Bitte Benutzer auswählen")) {
-                    auswahlListe.add(auswahl);
-                    addUser(auswahlListe.toArray());
+        label.setText("Empfänger: ");
 
+        JTextField userTextField;
+        userTextField = autoCompleteUsernames.getInput();
+
+        JTextField finalUserTextField = userTextField;
+        userTextField.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                boolean userSeleceted = false;
+                boolean userExists = false;
+                String textFieldUsername = finalUserTextField.getText();
+
+                for (int i = 0; i < model.getSize(); i++) {
+                    if (model.get(i).equals(textFieldUsername)) {
+                        userSeleceted = true;
+                    }
                 }
+
+                for (String username : usernames) {
+                    if (textFieldUsername.equals(username)) {
+                        userExists = true;
+                    }
+                }
+                if (!userSeleceted && userExists) model.addElement(finalUserTextField.getText());
+                finalUserTextField.setText("");
             }
         });
 
-        benutzerPanel.add(benutzerliste, BorderLayout.WEST);
-        benutzerPanel.add(label, BorderLayout.WEST);
+        benutzerPanel.add(label);
+        benutzerPanel.add(userTextField);
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(bLoeschen);
         buttonPanel.add(bSenden);
         panel.add(buttonPanel, BorderLayout.EAST);
         panel.add(benutzerPanel, BorderLayout.WEST);
-        panel.setBorder(BorderFactory.createLineBorder(frame.getContentPane().getBackground(), 10));
+        panel.setBorder(BorderFactory.createLineBorder(frame.getContentPane().getBackground(), 5));
 
         return panel;
-    }
-
-    private void addUser(Object[] newUser){
-        String[] s = new String[newUser.length];
-        for(int i = 0; i < s.length; i++){
-            s[i] = newUser[i].toString();
-        }
-        list.setListData(s);
     }
 
     private JScrollPane getMittelScrollPane() {
@@ -125,11 +148,11 @@ public class SendFileGUI {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY);
                     try {
                         for (Object filePath : (List)tr.getTransferData(DataFlavor.javaFileListFlavor)) {
-                            droppedFiles.add(filePath.toString());
+                            selectedFiles.add(filePath.toString());
                             iconScrollPane.setViewportView(getIconsPanel());
                         }
                     } catch (UnsupportedFlavorException | IOException e) {
-                        showErrorDialog(e);
+                        showErrorDialog(e, "Fehler beim Drop");
                     }
 
                     dtde.getDropTargetContext().dropComplete(true);
@@ -146,16 +169,16 @@ public class SendFileGUI {
         JPanel iconsPanel = new JPanel();
         iconsPanel.setLayout(new GridBagLayout());
 
-        java.util.List<GridBagConstraints> gbcList = GridBagConstraintsCreator.createGridBagConstraints(droppedFiles, ICONS_PER_ROW);
+        java.util.List<GridBagConstraints> gbcList = GridBagConstraintsCreator.createGridBagConstraints(selectedFiles, ICONS_PER_ROW);
 
-        IconPanel[] iconList = new IconPanel[droppedFiles.size()];
-        for (int i = 0; i < droppedFiles.size(); i++) {
+        IconPanel[] iconList = new IconPanel[selectedFiles.size()];
+        for (int i = 0; i < selectedFiles.size(); i++) {
             try {
-                iconList[i] = new IconPanel(droppedFiles.get(i));
+                iconList[i] = new IconPanel(selectedFiles.get(i));
                 iconList[i].switchClicked();
                 iconsPanel.add(iconList[i], gbcList.get(i));
             } catch (DateiExistiertNichtException e) {
-                showErrorDialog(e);
+                showErrorDialog(e, "Datei nicht gefunden");
             }
         }
 
@@ -198,18 +221,6 @@ public class SendFileGUI {
         new UeberUnsGUI(frame);
     }
 
-    private void sendSelectedFiles() {
-        for (String file : droppedFiles) {
-            String[] splitPath = file.replace("\\", "/").split("/");
-            String fileName = splitPath[splitPath.length-1];
-            try {
-                Copy.copy(file, destinationFolder + "/" + fileName);
-            } catch (DragException e) {
-                showErrorDialog(e);
-            }
-        }
-    }
-
     private void addBorder (JComponent component) {
         component.setBorder(
                 new CompoundBorder(
@@ -220,11 +231,13 @@ public class SendFileGUI {
     }
 
     private void clearInputs() {
-        droppedFiles = new ArrayList<>();
+        selectedFiles = new ArrayList<>();
         iconScrollPane.setViewportView(getIconsPanel());
+        model = new DefaultListModel<>();
+        selectedUsersList.setModel(model);
     }
 
-    private void showErrorDialog(Throwable t) {
-        JOptionPane.showMessageDialog(frame, t.getMessage(), "Fehler beim Drop", JOptionPane.ERROR_MESSAGE);
+    private void showErrorDialog(Throwable t, String message) {
+        JOptionPane.showMessageDialog(frame, t.getMessage(), message, JOptionPane.ERROR_MESSAGE);
     }
 }
