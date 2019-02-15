@@ -21,6 +21,6 @@ public class DirCreater {
         }
     }
     public static void main(String[] args){
-            DirCreater.createDir("C:\\Users\\Administrator\\Documents\\Ali");
+            DirCreater.createDir("C:/Users/Administrator/Documents/Ali");
     }
 }

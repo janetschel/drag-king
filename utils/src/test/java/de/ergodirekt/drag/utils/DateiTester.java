@@ -3,8 +3,6 @@ package de.ergodirekt.drag.utils;
 
 
 public class DateiTester {
-
-
     public static void main(String[] args) throws Exception {
         //String txt = System.getProperty("user.name");
         Datei d = new Datei("T:\\Friedrich\\Projekt\\properties\\test.txt");
@@ -14,11 +12,5 @@ public class DateiTester {
         else {
             d.schreibe(System.getProperty("user.name")+"\n",true);
         }
-
     }
 }
-
-
-
-
-
