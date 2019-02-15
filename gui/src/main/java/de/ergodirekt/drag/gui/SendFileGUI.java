@@ -1,7 +1,8 @@
 package de.ergodirekt.drag.gui;
 
 import de.ergodirekt.drag.autocomplete.AutoCompleteUsernames;
-import de.ergodirekt.drag.utils.Copy;
+
+import de.ergodirekt.drag.utils.Datei;
 import de.ergodirekt.drag.utils.DragException;
 import de.ergodirekt.drag.utils.GridBagConstraintsCreator;
 import de.ergodirekt.drag.utils.fileicon.DateiExistiertNichtException;
@@ -25,14 +26,20 @@ import javax.swing.border.CompoundBorder;
 public class SendFileGUI {
     private static final int ICONS_PER_ROW = 4;
     private static final int INSET = 5;
-    private final String[] usernames = {"Jan Etschel", "Manuel Waelzlein", "Habib Akroush", "Mohammad Ali Elbokaie", "Obada Al Refai"}; //TODO Von Ordner lesen
+    private final String[] usernames;
     private JFrame frame;
-    private List<String> droppedFiles = new ArrayList<>();
-    private String destinationFolder = System.getProperty("user.home").replace("\\", "/") + "/Ordner"; //TODO Ersetzen durch Pfad auf Zielordner
+    private List<String> selectedFiles = new ArrayList<>();
+    private String destinationFolder = "T:/Friedrich/DO NOT TOUCH THIS!";
     private JScrollPane iconScrollPane;
     private DefaultListModel<String> model;
+    private JList<String> selectedUsersList;
 
     public SendFileGUI() {
+        String[] filePaths = Datei.getFilePathsFromDirectory(destinationFolder);
+        usernames = new String[filePaths.length];
+        for (int i = 0; i < filePaths.length; i++) {
+            usernames[i] = Datei.getFileNameFromPath(filePaths[i]);
+        }
         AutoCompleteUsernames autoCompleteUsernames = new AutoCompleteUsernames(usernames);
         SwingUtilities.invokeLater(autoCompleteUsernames);
         frame = new JFrame();
@@ -55,9 +62,9 @@ public class SendFileGUI {
 
     private Component getNordPanel() {
         model = new DefaultListModel<>();
-        JList<String> list = new JList<>(model);
-        list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        JScrollPane listScroller = new JScrollPane(list);
+        selectedUsersList = new JList<>(model);
+        selectedUsersList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        JScrollPane listScroller = new JScrollPane(selectedUsersList);
         listScroller.setPreferredSize(new Dimension(250, 80));
         addBorder(listScroller);
 
@@ -70,7 +77,13 @@ public class SendFileGUI {
         panel.setLayout(new BorderLayout());
 
         JButton bSenden = new JButton("Senden");
-        bSenden.addActionListener(e -> sendSelectedFiles());
+        bSenden.addActionListener(e -> {
+            try {
+                Datei.sendFiles(selectedUsersList, selectedFiles.toArray(new String[0]), destinationFolder);
+            } catch (DragException de) {
+                showErrorDialog(de, "Datei konnte nicht geschickt werden");
+            }
+        });
         JButton bLoeschen = new JButton("Löschen");
         bLoeschen.addActionListener(e -> clearInputs());
         JPanel benutzerPanel = new JPanel();
@@ -78,14 +91,7 @@ public class SendFileGUI {
         label.setText("Empfänger: ");
 
         JTextField userTextField;
-        do {
-            userTextField = autoCompleteUsernames.getInput();
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                showErrorDialog(e);
-            }
-        } while (userTextField == null);
+        userTextField = autoCompleteUsernames.getInput();
 
         JTextField finalUserTextField = userTextField;
         userTextField.addActionListener(new AbstractAction() {
@@ -107,6 +113,7 @@ public class SendFileGUI {
                         userExists = true;
                     }
                 }
+
                 if (!userSeleceted && userExists) model.addElement(finalUserTextField.getText());
                 finalUserTextField.setText("");
             }
@@ -143,11 +150,11 @@ public class SendFileGUI {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY);
                     try {
                         for (Object filePath : (List)tr.getTransferData(DataFlavor.javaFileListFlavor)) {
-                            droppedFiles.add(filePath.toString());
+                            selectedFiles.add(filePath.toString());
                             iconScrollPane.setViewportView(getIconsPanel());
                         }
                     } catch (UnsupportedFlavorException | IOException e) {
-                        showErrorDialog(e);
+                        showErrorDialog(e, "Fehler beim Drop");
                     }
 
                     dtde.getDropTargetContext().dropComplete(true);
@@ -164,16 +171,16 @@ public class SendFileGUI {
         JPanel iconsPanel = new JPanel();
         iconsPanel.setLayout(new GridBagLayout());
 
-        java.util.List<GridBagConstraints> gbcList = GridBagConstraintsCreator.createGridBagConstraints(droppedFiles, ICONS_PER_ROW);
+        java.util.List<GridBagConstraints> gbcList = GridBagConstraintsCreator.createGridBagConstraints(selectedFiles, ICONS_PER_ROW);
 
-        IconPanel[] iconList = new IconPanel[droppedFiles.size()];
-        for (int i = 0; i < droppedFiles.size(); i++) {
+        IconPanel[] iconList = new IconPanel[selectedFiles.size()];
+        for (int i = 0; i < selectedFiles.size(); i++) {
             try {
-                iconList[i] = new IconPanel(droppedFiles.get(i));
+                iconList[i] = new IconPanel(selectedFiles.get(i));
                 iconList[i].switchClicked();
                 iconsPanel.add(iconList[i], gbcList.get(i));
             } catch (DateiExistiertNichtException e) {
-                showErrorDialog(e);
+                showErrorDialog(e, "Datei nicht gefunden");
             }
         }
 
@@ -216,18 +223,6 @@ public class SendFileGUI {
         new UeberUnsGUI(frame);
     }
 
-    private void sendSelectedFiles() {
-        for (String file : droppedFiles) {
-            String[] splitPath = file.replace("\\", "/").split("/");
-            String fileName = splitPath[splitPath.length-1];
-            try {
-                Copy.copy(file, destinationFolder + "/" + fileName);
-            } catch (DragException e) {
-                showErrorDialog(e);
-            }
-        }
-    }
-
     private void addBorder (JComponent component) {
         component.setBorder(
                 new CompoundBorder(
@@ -238,11 +233,13 @@ public class SendFileGUI {
     }
 
     private void clearInputs() {
-        droppedFiles = new ArrayList<>();
+        selectedFiles = new ArrayList<>();
         iconScrollPane.setViewportView(getIconsPanel());
+        model = new DefaultListModel<>();
+        selectedUsersList.setModel(model);
     }
 
-    private void showErrorDialog(Throwable t) {
-        JOptionPane.showMessageDialog(frame, t.getMessage(), "Fehler beim Drop", JOptionPane.ERROR_MESSAGE);
+    private void showErrorDialog(Throwable t, String message) {
+        JOptionPane.showMessageDialog(frame, t.getMessage(), message, JOptionPane.ERROR_MESSAGE);
     }
 }
