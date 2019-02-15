@@ -4,8 +4,6 @@ import java.io.File;
 
 public class DirCreater {
     public static void createDir(String path) {
-
-
         String newpath = path;
         File dir = new File(newpath);
         if (!dir.exists()) {
