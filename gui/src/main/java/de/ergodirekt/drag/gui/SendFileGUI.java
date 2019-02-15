@@ -1,5 +1,6 @@
 package de.ergodirekt.drag.gui;
 
+import de.ergodirekt.drag.autocomplete.AutoCompleteUsernames;
 import de.ergodirekt.drag.utils.Copy;
 import de.ergodirekt.drag.utils.DragException;
 import de.ergodirekt.drag.utils.GridBagConstraintsCreator;
@@ -13,7 +14,7 @@ import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.event.ItemEvent;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +25,16 @@ import javax.swing.border.CompoundBorder;
 public class SendFileGUI {
     private static final int ICONS_PER_ROW = 4;
     private static final int INSET = 5;
+    private final String[] usernames = {"Jan Etschel", "Manuel Waelzlein", "Habib Akroush", "Mohammad Ali Elbokaie", "Obada Al Refai"}; //TODO Von Ordner lesen
     private JFrame frame;
-    private JList<String> list;
     private List<String> droppedFiles = new ArrayList<>();
     private String destinationFolder = System.getProperty("user.home").replace("\\", "/") + "/Ordner"; //TODO Ersetzen durch Pfad auf Zielordner
     private JScrollPane iconScrollPane;
+    private DefaultListModel<String> model;
 
     public SendFileGUI() {
+        AutoCompleteUsernames autoCompleteUsernames = new AutoCompleteUsernames(usernames);
+        SwingUtilities.invokeLater(autoCompleteUsernames);
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         //frame.setSize(600, 500);
@@ -41,19 +45,18 @@ public class SendFileGUI {
         frame.setJMenuBar(getMenue());
 
         frame.add(getMittelScrollPane(), BorderLayout.CENTER);
-        frame.add(getSuedPanel(), BorderLayout.SOUTH);
-        frame.add(getNordlPanel(), BorderLayout.WEST);
+        frame.add(getSuedPanel(autoCompleteUsernames), BorderLayout.SOUTH);
+        frame.add(getNordPanel(), BorderLayout.WEST);
 
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
-    private Component getNordlPanel() {
-        list = new JList(); //data has type Object[]
-        list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+    private Component getNordPanel() {
+        model = new DefaultListModel<>();
+        JList<String> list = new JList<>(model);
         list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        //list.setVisibleRowCount(-1);
         JScrollPane listScroller = new JScrollPane(list);
         listScroller.setPreferredSize(new Dimension(250, 80));
         addBorder(listScroller);
@@ -62,48 +65,63 @@ public class SendFileGUI {
     }
 
 
-    private Component getSuedPanel() {
+    private Component getSuedPanel(AutoCompleteUsernames autoCompleteUsernames) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        List<String> auswahlListe = new ArrayList<>();
 
         JButton bSenden = new JButton("Senden");
         bSenden.addActionListener(e -> sendSelectedFiles());
         JButton bLoeschen = new JButton("Löschen");
         bLoeschen.addActionListener(e -> clearInputs());
-        String[] placeholder = {"Bitte Benutzer auswählen","Benutzer1", "Benutzer2", "Benutzer3", "Benutzer4", "Benutzer5", "Benutzer6"};
         JPanel benutzerPanel = new JPanel();
         JLabel label = new JLabel();
-        JComboBox<String> benutzerliste = new JComboBox<>(placeholder);
-        benutzerliste.addItemListener(e -> {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                String auswahl = (String) e.getItem();
-                if (!auswahlListe.contains(auswahl) && !auswahl.equals("Bitte Benutzer auswählen")) {
-                    auswahlListe.add(auswahl);
-                    addUser(auswahlListe.toArray());
+        label.setText("Empfänger: ");
 
+        JTextField userTextField;
+        do {
+            userTextField = autoCompleteUsernames.getInput();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                showErrorDialog(e);
+            }
+        } while (userTextField == null);
+
+        JTextField finalUserTextField = userTextField;
+        userTextField.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                boolean userSeleceted = false;
+                boolean userExists = false;
+                String textFieldUsername = finalUserTextField.getText();
+
+                for (int i = 0; i < model.getSize(); i++) {
+                    if (model.get(i).equals(textFieldUsername)) {
+                        userSeleceted = true;
+                    }
                 }
+
+                for (String username : usernames) {
+                    if (textFieldUsername.equals(username)) {
+                        userExists = true;
+                    }
+                }
+                if (!userSeleceted && userExists) model.addElement(finalUserTextField.getText());
+                finalUserTextField.setText("");
             }
         });
 
-        benutzerPanel.add(benutzerliste, BorderLayout.WEST);
-        benutzerPanel.add(label, BorderLayout.WEST);
+        benutzerPanel.add(label);
+        benutzerPanel.add(userTextField);
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(bLoeschen);
         buttonPanel.add(bSenden);
         panel.add(buttonPanel, BorderLayout.EAST);
         panel.add(benutzerPanel, BorderLayout.WEST);
-        panel.setBorder(BorderFactory.createLineBorder(frame.getContentPane().getBackground(), 10));
+        panel.setBorder(BorderFactory.createLineBorder(frame.getContentPane().getBackground(), 5));
 
         return panel;
-    }
-
-    private void addUser(Object[] newUser){
-        String[] s = new String[newUser.length];
-        for(int i = 0; i < s.length; i++){
-            s[i] = newUser[i].toString();
-        }
-        list.setListData(s);
     }
 
     private JScrollPane getMittelScrollPane() {
