@@ -1,5 +1,6 @@
 package de.ergodirekt.drag.gui;
 
+import de.ergodirekt.drag.utils.Datei;
 import de.ergodirekt.drag.utils.fileicon.DateiExistiertNichtException;
 import de.ergodirekt.drag.utils.fileicon.GetIconFromFilePath;
 
@@ -18,8 +19,7 @@ class IconPanel extends JPanel {
         new JPanel(new BorderLayout());
         add(new JLabel(GetIconFromFilePath.getIconFromFilePath(filePath, 70, 70)), BorderLayout.NORTH);
 
-        String[] filePathParts = filePath.replace("\\", "/").split("/");
-        String fileName = filePathParts[filePathParts.length-1];
+        String fileName = Datei.getFileNameFromPath(filePath);
 
         JLabel iconText = new JLabel(fileName, SwingConstants.CENTER);
         iconText.setPreferredSize(new Dimension(ICON_WIDTH,20));
