@@ -36,7 +36,7 @@ public class ReceiveFileGUI implements FileWatcherListener{
 
         String[] filePaths = Datei.getFilePathsFromDirectory(filePath);
 
-        java.util.List<GridBagConstraints> gbcList = GridBagConstraintsCreator.createGridBagConstraints(Collections.singletonList(filePath), ICONS_PER_ROW);
+        java.util.List<GridBagConstraints> gbcList = GridBagConstraintsCreator.createGridBagConstraints(filePaths.length, ICONS_PER_ROW);
 
 
         iconList = new IconPanel[filePaths.length];

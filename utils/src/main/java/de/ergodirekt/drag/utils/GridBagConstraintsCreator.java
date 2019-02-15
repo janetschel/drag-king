@@ -7,10 +7,10 @@ import java.util.List;
 public abstract class GridBagConstraintsCreator {
     private static final int INSET = 5;
 
-    public static List<GridBagConstraints> createGridBagConstraints(List list, int iconsPerRow) {
+    public static List<GridBagConstraints> createGridBagConstraints(int listLength, int iconsPerRow) {
         List<GridBagConstraints> gbcList = new ArrayList<>();
 
-        int helper = ((float) list.size() / iconsPerRow) % 1 == 0 ? list.size() / iconsPerRow : list.size() / iconsPerRow + 1;
+        int helper = ((float) listLength / iconsPerRow) % 1 == 0 ? listLength / iconsPerRow : listLength / iconsPerRow + 1;
         GridBagConstraints gbc = new GridBagConstraints();
         for (int j = 0; j < helper; j++) {
             for (int i = 0; i < iconsPerRow; i++) {

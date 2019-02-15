@@ -29,12 +29,13 @@ public class SendFileGUI {
     private final String[] usernames;
     private JFrame frame;
     private List<String> selectedFiles = new ArrayList<>();
-    private String destinationFolder = "T:/Friedrich/DO NOT TOUCH THIS!";
+    private String destinationFolder;
     private JScrollPane iconScrollPane;
     private DefaultListModel<String> model;
     private JList<String> selectedUsersList;
 
-    public SendFileGUI() {
+    public SendFileGUI(String destinationFolder) {
+        this.destinationFolder = destinationFolder;
         String[] filePaths = Datei.getFilePathsFromDirectory(destinationFolder);
         usernames = new String[filePaths.length];
         for (int i = 0; i < filePaths.length; i++) {
@@ -171,7 +172,7 @@ public class SendFileGUI {
         JPanel iconsPanel = new JPanel();
         iconsPanel.setLayout(new GridBagLayout());
 
-        java.util.List<GridBagConstraints> gbcList = GridBagConstraintsCreator.createGridBagConstraints(selectedFiles, ICONS_PER_ROW);
+        java.util.List<GridBagConstraints> gbcList = GridBagConstraintsCreator.createGridBagConstraints(selectedFiles.size(), ICONS_PER_ROW);
 
         IconPanel[] iconList = new IconPanel[selectedFiles.size()];
         for (int i = 0; i < selectedFiles.size(); i++) {

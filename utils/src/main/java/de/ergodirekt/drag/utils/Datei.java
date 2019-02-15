@@ -1,6 +1,7 @@
 package de.ergodirekt.drag.utils;
 
 import javax.swing.*;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -9,37 +10,28 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Datei {
-    private String dateiName;
-
-    public Datei(String dateiName) {
-        this.dateiName = dateiName;
-
+public abstract class Datei {
+    public void schreibe(String dateiPfad, String text) {
+        schreibe(dateiPfad, text, false);
     }
 
-    public void schreibe(String text) {
-        schreibe(text, false);
-    }
-
-    public void schreibe(String txt, boolean append) {
+    public void schreibe(String dateiPfad, String txt, boolean append) {
         File datei;
-        datei = new File(dateiName);
-        try (FileWriter outStream = new FileWriter(datei, append)){
-
+        datei = new File(dateiPfad);
+        try (FileWriter outStream = new FileWriter(datei, append)) {
             outStream.write(txt);
-
         } catch (IOException e) {
             // Fehlerbehandlung
             e.printStackTrace();
         }
     }
 
-    public String lese() {
+    public String lese(String dateiPfad) {
         StringBuffer inhalt = new StringBuffer();
         File datei;
         BufferedReader reader;
         // einlesen der Datei
-        datei = new File(dateiName); // Erzeuge ein Datei-Objekt
+        datei = new File(dateiPfad); // Erzeuge ein Datei-Objekt
         try (FileReader inStream = new FileReader(datei)) {
             reader = new BufferedReader(inStream);
             String zeile = " ";
