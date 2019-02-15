@@ -23,7 +23,6 @@ public class Datei {
 
     public Datei(String dateiName) {
         this.dateiName = dateiName;
-
     }
 
     public static Properties getProperties() {
