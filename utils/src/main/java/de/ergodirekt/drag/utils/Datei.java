@@ -1,13 +1,15 @@
 package de.ergodirekt.drag.utils;
 
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class Datei {
     private String dateiName;
@@ -15,6 +17,33 @@ public class Datei {
     public Datei(String dateiName) {
         this.dateiName = dateiName;
 
+    }
+
+    public static Properties getProperties() {
+        Properties properties = new Properties();
+        Path pathToPropFile = Paths.get(System.getProperty("user.home"), "drag-home", "drag.properties");
+        try (BufferedReader rdr = Files.newBufferedReader(pathToPropFile)) {
+            properties.load(rdr);
+        } catch (NoSuchFileException e) {
+            Path p = Paths.get(System.getProperty("user.home"), "Ordner");
+            properties.setProperty("destinationFolder", p.toString());
+
+            properties.setProperty("austauschOrdner", Paths.get(p.toString(), System.getProperty("user.name")).toString());
+
+            Path pathToPropDir = Paths.get(System.getProperty("user.home"), "drag-home");
+            pathToPropDir.toFile().mkdirs();
+            try (BufferedWriter w = Files.newBufferedWriter(pathToPropFile, Charset.defaultCharset())) {
+                properties.store(w, "Neu angelegt");
+
+            } catch (IOException e1) {
+                // TODO Errorhandling
+                e1.printStackTrace();
+            }
+        } catch (IOException e1) {
+            // TODO Errorhandling
+            e1.printStackTrace();
+        }
+        return properties;
     }
 
     public void schreibe(String text) {
@@ -27,7 +56,7 @@ public class Datei {
         File file = new File(dateiName);
         File datei = null;
         datei = new File(dateiName);
-        try (FileWriter outStream = new FileWriter(datei, append)){
+        try (FileWriter outStream = new FileWriter(datei, append)) {
 
             outStream.write(txt);
 
