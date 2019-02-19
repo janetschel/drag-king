@@ -11,6 +11,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.swing.*;
 
 public class ReceiveFileGUI implements FileWatcherListener{
@@ -33,16 +34,16 @@ public class ReceiveFileGUI implements FileWatcherListener{
         iconsPanel = new JPanel();
         iconsPanel.setLayout(new GridBagLayout());
 
-        java.util.List<String> filePaths = Datei.getFilePathsFromDirectory(filePath);
+        String[] filePaths = Datei.getFilePathsFromDirectory(filePath);
 
-        java.util.List<GridBagConstraints> gbcList = GridBagConstraintsCreator.createGridBagConstraints(filePaths, ICONS_PER_ROW);
+        java.util.List<GridBagConstraints> gbcList = GridBagConstraintsCreator.createGridBagConstraints(Collections.singletonList(filePath), ICONS_PER_ROW);
 
 
-        iconList = new IconPanel[filePaths.size()];
-        for (int i = 0; i < filePaths.size(); i++) {
+        iconList = new IconPanel[filePaths.length];
+        for (int i = 0; i < filePaths.length; i++) {
             int iconNumber = i;
             try {
-                iconList[i] = new IconPanel(filePaths.get(i));
+                iconList[i] = new IconPanel(filePaths[i]);
                 iconList[i].addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent mEvt) {
@@ -73,7 +74,7 @@ public class ReceiveFileGUI implements FileWatcherListener{
                 });
             } catch (DateiExistiertNichtException e) {
                 errorMessage.append(errorMessage.toString().equals("") ? ListTransferHandler.ERROR_MESSAGE : "");
-                errorMessage.append(filePaths.get(i)).append("<br/>");
+                errorMessage.append(filePaths[i]).append("<br/>");
             }
         }
 
@@ -108,7 +109,7 @@ public class ReceiveFileGUI implements FileWatcherListener{
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent event) {
-                int selectedOption = JOptionPane.showConfirmDialog(frame, "Möchten Sie die empfangenen Dateien von ihrem Transferlaufwerk löschen?", "Dateien löschen?", JOptionPane.YES_NO_CANCEL_OPTION);
+                int selectedOption = JOptionPane.showConfirmDialog(frame, "Möchten Sie die empfangenen Dateien von Ihrem Transferlaufwerk löschen?", "Dateien löschen?", JOptionPane.YES_NO_CANCEL_OPTION);
                 if (selectedOption == JOptionPane.YES_OPTION) {
                     Datei.deleteAllFilesFromDirectory(folderPath);
                     frame.dispose();
