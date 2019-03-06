@@ -11,8 +11,8 @@ public class CopyTest {
 
     @Test
     public void copyTest() {
-        String srcFolder = "C:\\Users\\Administrator\\Desktop\\hello.png";
-        String destFolder = "C:\\Users\\Administrator\\Documents\\newHello.png";
+        String srcFolder = "C:\\Users\\Administrator\\Desktop\\hello";
+        String destFolder = "C:\\Users\\Administrator\\Documents\\newHello";
 
         try{
             Copy.copy(srcFolder, destFolder);
